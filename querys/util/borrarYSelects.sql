@@ -2,6 +2,8 @@ USE [tarea3BD]
 
 
 -- SELECT statements
+SELECT * FROM dbo.DBError;
+
 SELECT * FROM [dbo].[EstadoDeCuenta];
 SELECT * FROM [dbo].[MotivoInvalidacionTarjeta];
 SELECT * FROM [dbo].[Movimientos];
@@ -31,6 +33,8 @@ SELECT * FROM [dbo].[TiposDeMovimientoMoratorios];
 SELECT * FROM [dbo].[TipoTarjetaCreditoMaestra];
 SELECT * FROM [dbo].[Usuarios];
 
+
+DELETE FROM dbo.DBError; 
 DELETE FROM [dbo].[EstadoDeCuenta];
 DELETE FROM [dbo].[MotivoInvalidacionTarjeta];
 DELETE FROM [dbo].[Movimientos];
@@ -59,8 +63,25 @@ DELETE FROM [dbo].[TiposDeMovimientoCorrientes];
 DELETE FROM [dbo].[TiposDeMovimientoMoratorios];
 DELETE FROM [dbo].[TipoTarjetaCreditoMaestra];
 DELETE FROM [dbo].[Usuarios];
+
+
+DBCC CHECKIDENT ('DBError', RESEED, 0);
+
+DBCC CHECKIDENT ('EstadoDeCuenta', RESEED, 0);
+DBCC CHECKIDENT ('MotivoInvalidacionTarjeta', RESEED, 0);
+DBCC CHECKIDENT ('Movimientos', RESEED, 0);
+DBCC CHECKIDENT ('MovimientosInteresesCorrientes', RESEED, 0);
+DBCC CHECKIDENT ('MovimientosInteresesMortatorios', RESEED, 0);
+DBCC CHECKIDENT ('MovimientoSospechoso', RESEED, 0);
 DBCC CHECKIDENT ('ReglasDeNegocio', RESEED, 0);
+DBCC CHECKIDENT ('TarjetaCredito', RESEED, 0);
+DBCC CHECKIDENT ('TarjetaFisica', RESEED, 0);
+DBCC CHECKIDENT ('TarjetaHabiente', RESEED, 0);
+DBCC CHECKIDENT ('TipoDeReglas', RESEED, 0);
 DBCC CHECKIDENT ('TipoDeUsuario', RESEED, 0);
-DBCC CHECKIDENT ('Usuarios', RESEED, 0);
+DBCC CHECKIDENT ('TipoDocumentoIdentidad', RESEED, 0);
+DBCC CHECKIDENT ('TiposDeMovimiento', RESEED, 0);
+DBCC CHECKIDENT ('TiposDeMovimientoCorrientes', RESEED, 0);
 DBCC CHECKIDENT ('TiposDeMovimientoMoratorios', RESEED, 0);
 DBCC CHECKIDENT ('TipoTarjetaCreditoMaestra', RESEED, 0);
+DBCC CHECKIDENT ('Usuarios', RESEED, 0);
