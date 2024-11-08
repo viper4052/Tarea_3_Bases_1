@@ -34,8 +34,12 @@ SELECT * FROM [dbo].[TipoTarjetaCreditoMaestra];
 SELECT * FROM [dbo].[Usuarios];
 
 
+
+
+
 DELETE FROM dbo.DBError; 
 DELETE FROM [dbo].[EstadoDeCuenta];
+DELETE FROM [dbo].[EstadoDeCuentaAdicional];
 DELETE FROM [dbo].[MotivoInvalidacionTarjeta];
 DELETE FROM [dbo].[Movimientos];
 DELETE FROM [dbo].[MovimientosConTF];
@@ -50,19 +54,19 @@ DELETE FROM [dbo].[RNQMeses];
 DELETE FROM [dbo].[RNQOperaciones];
 DELETE FROM [dbo].[RNTasa];
 DELETE FROM [dbo].[ReglasDeNegocio];
-DELETE FROM [dbo].[TarjetaCredito];
+DELETE FROM [dbo].[TarjetaFisica];
 DELETE FROM [dbo].[TarjetaCreditoAdicional];
 DELETE FROM [dbo].[TarjetaCreditoMaestra];
-DELETE FROM [dbo].[TarjetaFisica];
+DELETE FROM [dbo].[TarjetaCredito];
 DELETE FROM [dbo].[TarjetaHabiente];
 DELETE FROM [dbo].[TipoDeReglas];
+DELETE FROM [dbo].[Usuarios];
 DELETE FROM [dbo].[TipoDeUsuario];
 DELETE FROM [dbo].[TipoDocumentoIdentidad];
 DELETE FROM [dbo].[TiposDeMovimiento];
 DELETE FROM [dbo].[TiposDeMovimientoCorrientes];
 DELETE FROM [dbo].[TiposDeMovimientoMoratorios];
 DELETE FROM [dbo].[TipoTarjetaCreditoMaestra];
-DELETE FROM [dbo].[Usuarios];
 
 
 DBCC CHECKIDENT ('DBError', RESEED, 0);

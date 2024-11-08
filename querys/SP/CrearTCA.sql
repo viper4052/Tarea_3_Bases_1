@@ -6,24 +6,22 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 /*
-    Se encarga de crear una nuev TCM 
-	crea tambien un nuevo TC asociado a ella junto con su primer estado de cuenta
+    Se encarga de crear una nuev TCA
+	crea tambien un nuevo TC asociado a ella junto con su primer estado de cuenta adicional
 --  Descripcion de parametros: 
 --  @outResultCode: codigo de resultado de ejecucion. 0 Corrio sin errores, 
 valores que se insertaran
---  @InCodigo
---  @InTipoTCM
---  @InLimiteCredito
+--  @InCodigoTCA
+--  @InCodigoTCM
 --  @InTarjetaHabiente
---  @contraseña
+--  @InFecha
 */
 
-ALTER PROCEDURE [dbo].[CrearTCM]
+CREATE PROCEDURE [dbo].[CrearTCA]
     @OutResulTCode INT OUTPUT
-    , @InCodigo INT
-    , @InTipoTCM VARCHAR(32)
-    , @InLimiteCredito VARCHAR(16)
-    , @InTarjetaHabiente VARCHAR(32)
+    , @InCodigoTCA INT
+    , @InCodigoTCM INT
+    , @InTarjetaHabiente VARCHAR(16)
 	, @InFecha DATE 
 AS
 BEGIN
@@ -31,42 +29,35 @@ BEGIN
     BEGIN TRY
         SET @OutResulTCode = 0;
         -- Variables de inserción 
+
         DECLARE @IdTarjeta INT
-				, @IdTipoTCM INT
 				, @IdTarjetaHabiente INT
 				, @IdTCM INT
-				, @FechaPagoMinimo DATE
 				, @FechaDeCierre DATE
 				, @IdReglaDeNegocio INT
 				, @QDias INT;
 
 		
-        
-		--preprocesamos el tipo de TCM
-		SELECT @IdTipoTCM = T.Id
-		FROM dbo.TipoTarjetaCreditoMaestra T
-		WHERE T.Nombre = @InTipoTCM
+    
 
 		--preprocesamos el tipo id del TH
 		SELECT @IdTarjetaHabiente = T.Id
 		FROM dbo.TarjetaHabiente T
 		WHERE T.ValorDocumentoIdentidad = @InTarjetaHabiente
 
-		
-		--Preprocesamos cantidad de dias para pago minimo
+		--Preprocesamos el Id de la TCM 
+		SELECT @IdTCM = TC.Id
+		FROM dbo.TarjetaCredito TC
+		WHERE TC.Codigo = @InCodigoTCM;
+	
 
-		SELECT @IdReglaDeNegocio = R.Id 
-		FROM dbo.ReglasDeNegocio R
-		WHERE R.Nombre = 'Cantidad de dias para pago saldo'
-		AND R.IdTipoDeTCM = @IdTipoTCM; 
-
-		SET @QDias = (SELECT R.Valor
-					  FROM dbo.RNQDias R
-					  WHERE R.IdReglaNegocio = @IdReglaDeNegocio);
-
-		--preprocesamos Fecha de cierre y de pago minimo
-		SET @FechaDeCierre = dbo.FechaDeCierre(@InFecha);
-		SET @FechaPagoMinimo = DATEADD(DAY, @QDias, @FechaDeCierre);
+		--preprocesamos Fecha de cierre
+		--como ya habiamos empezado el estado de cuenta de la TCM
+		--Tan solo copiamos la misma fecha
+		SET @FechaDeCierre = (SELECT EC.FechaInicio
+							  FROM dbo.EstadoDeCuenta EC
+							  WHERE EC.IdTCM = @IdTCM
+							  AND EC.FechaInicio = @InFecha);
 
 		
 
@@ -79,89 +70,58 @@ BEGIN
         VALUES
         (
             @InFecha
-			, @InCodigo
+			, @InCodigoTCA
         )
         
         SET @IdTarjeta = SCOPE_IDENTITY();
 
 
-		
-        INSERT INTO [dbo].[TarjetaCreditoMaestra]
+
+        INSERT INTO [dbo].[TarjetaCreditoAdicional]
         (
-            IdTarjeta
+			IdTarjeta
 			, IdTarjetaHabiente
-			, IdTipoTCM
-			, LimiteCredito
-			, SaldoActual
-			, SumaDeMovimientosEnTransito
-			, SaldoInteresesCorrientes
-			, SaldoInteresMoratorios
-			, SaldoPagoMinimo
-			, PagoAcumuladosDelPeriodo
+			, IdTCM
         )
         VALUES
         (
             @IdTarjeta
             , @IdTarjetaHabiente
-            , @IdTipoTCM
-            , CONVERT(MONEY, @InLimiteCredito)
-            , 0
-			, 0
-			, 0
-			, 0
-			, 0
-			, 0
+            , @IdTCM
         )
 
-		SET @IdTCM = @IdTarjeta;
 		
-		--Ya que creamos las TCM, generemos su primer inicio de estado de cuenta 
+		--Ya que creamos las TCA, generemos su primer inicio de estado de cuenta adicional
 
-		INSERT INTO [dbo].[EstadoDeCuenta]
+		INSERT INTO [dbo].[EstadoDeCuentaAdicional]
         (
             FechaInicio
 			, FechaFin
-			, PagoMinimoMesAnterior
-			, FechaParaPagoMinimo
-			, InteresesMoratorios
-			, InteresesCorrientes
 			, CantidadOperacionesATM
 			, CantidadOperacionesVentana
-			, SumaDePagos
-			, CantidadDePagos
 			, SumaDeCompras
 			, CantidadDeCompras
 			, SumaDeRetiros
 			, CantidadDeRetiros
 			, SumaDeCreditos
-			, CantidadDeCreditos
 			, SumaDeDebitos
-			, CantidadDeDebitos
 			, IdTCM
-			, PagoDeContado
+			, IdTCA
         )
         VALUES
         (
             @InFecha
             , @FechaDeCierre
             , 0
-            , @FechaPagoMinimo
+            , 0
             , 0
 			, 0
 			, 0
 			, 0
 			, 0
 			, 0
-			, 0
-			, 0
-			, 0
-			, 0
-			, 0
-			, 0
-			, 0
-			, 0
 			, @IdTCM
-			, 0
+			, @IdTarjeta
         )
         COMMIT TRANSACTION;
     END TRY

@@ -102,6 +102,7 @@ CROSS APPLY
     FROM XmlCol.nodes('root/RN/RN') AS T(z)
 ) AS result;
 
+
 --Primero insertamos en reglas de negocio principal 
 	INSERT INTO dbo.ReglasDeNegocio 
 	(
@@ -115,7 +116,8 @@ CROSS APPLY
 	FROM @ReglasDeNegocio RN
 	INNER JOIN dbo.TipoTarjetaCreditoMaestra TCM ON RN.TipoDeTCM = TCM.Nombre
 	INNER JOIN dbo.TipoDeReglas TR ON RN.TipoRN = TR.Nombre
-			
+
+
 	--Declaramos Variables para el while
 	DECLARE @lo INT
 			, @hi INT
@@ -128,25 +130,23 @@ CROSS APPLY
 	SET @lo = 1;
 
 -- ahora insertamos los valores en las tablas dedicadas a traves de un SP 
+	DECLARE @OutResultCode INT;
+	SET @OutResultCode = 0;
 WHILE (@lo <= @hi)
 	BEGIN 
-
+		
 		SELECT @TipoRN = RN.TipoRN
 			   , @Valor = RN.Valor
 		FROM @ReglasDeNegocio RN
 		WHERE @lo = RN.Id; 
 
-
-		EXEC DelegarTipoRN 0, @lo, @TipoRN, @Valor;
+		EXEC DelegarTipoRN @OutResultCode, @lo, @TipoRN, @Valor;
 		
 		SET @lo += 1;
 	END;
 
 
-
-
 ---Ya habiendo insertado las Reglas de Negocio toca insertar En motivos de invalidacion 
-
 
 INSERT INTO [dbo].[MotivoInvalidacionTarjeta]
 SELECT result.Nombre
