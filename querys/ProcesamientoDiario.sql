@@ -166,12 +166,12 @@ intereses*/
 		FROM @TarjetaHabientes TH
 		WHERE TH.Id = @loopI;
 
-		/*EXEC InsertarTarjetaHabiente 0
+		EXEC InsertarTarjetaHabiente 0
 									 , @NombreTarjetaHabiente 
 									 , @ValorDocIdentidad
 									 , @FechaNacimiento
 									 , @Username
-									 , @contraseña*/
+									 , @contraseña
 
 		SET @loopI += 1;
 	END; 
@@ -220,12 +220,12 @@ intereses*/
 		FROM @NuevosTCM TM
 		WHERE TM.Id = @loopI;
 
-		/*EXEC CrearTCM @ResultCode
+		EXEC CrearTCM @ResultCode
 					   , @Codigo 
 					   , @TipoTCM
 					   , @LimiteDeCredito
 					   , @TarjetaHabiente
-					   , @FechaHoy*/
+					   , @FechaHoy
 
 
 		SET @loopI += 1;
@@ -271,11 +271,11 @@ intereses*/
 		FROM @NuevosTCA TA
 		WHERE TA.Id = @loopI;
 
-		/*EXEC CrearTCA @ResultCode
+		EXEC CrearTCA @ResultCode
 					   , @CodigoTCA 
 					   , @CodigoTCM
 					   , @TarjetaHabiente
-					   , @FechaHoy*/
+					   , @FechaHoy
 
 
 		SET @loopI += 1;
@@ -329,12 +329,12 @@ intereses*/
 		FROM @NuevosTF TF
 		WHERE TF.Id = @loopI;
 
-		/*EXEC CrearTF @ResultCode
+		EXEC CrearTF @ResultCode
 					   , @CodigoTCA 
 					   , @NumeroTarjeta
 					   , @CCV
 					   , @FechaVencimiento
-					   , @FechaHoy*/
+					   , @FechaHoy
 
 
 		SET @loopI += 1;
@@ -349,7 +349,7 @@ intereses*/
 	--Ya que procesamos todas las tarjetas ahora toca hacer el procesamiento de los movimientos
 	--lo que vamos a hacer es insertar en una tabla de parametro que lleva los movimientos diarios 
 
-
+/*
 	INSERT INTO @MovsDiarios
     SELECT 
 		ROW_NUMBER() OVER (ORDER BY (SELECT NULL)) AS Id
@@ -420,7 +420,7 @@ intereses*/
 		SET @loopI += 1;
 	END;
 
-	SELECT * FROM @MovsDiarios; 
+	SELECT * FROM @MovsDiarios; */
 
 	DELETE FROM @TarjetaHabientes;
 	DELETE FROM @NuevosTCM; 

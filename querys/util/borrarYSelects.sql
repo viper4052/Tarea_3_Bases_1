@@ -33,10 +33,6 @@ SELECT * FROM [dbo].[TiposDeMovimientoMoratorios];
 SELECT * FROM [dbo].[TipoTarjetaCreditoMaestra];
 SELECT * FROM [dbo].[Usuarios];
 
-
-
-
-
 DELETE FROM dbo.DBError; 
 DELETE FROM [dbo].[EstadoDeCuenta];
 DELETE FROM [dbo].[EstadoDeCuentaAdicional];
@@ -68,9 +64,7 @@ DELETE FROM [dbo].[TiposDeMovimientoCorrientes];
 DELETE FROM [dbo].[TiposDeMovimientoMoratorios];
 DELETE FROM [dbo].[TipoTarjetaCreditoMaestra];
 
-
 DBCC CHECKIDENT ('DBError', RESEED, 0);
-
 DBCC CHECKIDENT ('EstadoDeCuenta', RESEED, 0);
 DBCC CHECKIDENT ('MotivoInvalidacionTarjeta', RESEED, 0);
 DBCC CHECKIDENT ('Movimientos', RESEED, 0);

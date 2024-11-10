@@ -1,4 +1,4 @@
-
+USE [tarea3BD]
 DECLARE  @MainXml TABLE
 	(
 		XmlCol XML
@@ -71,7 +71,7 @@ INSERT INTO @MovsDiarios
 			, @NumeroTarjeta BIGINT
 			, @FechaHoy DATE;
 
-	SET @NumeroTarjeta = 5525247354599728; 
+	SET @NumeroTarjeta = 2256488286809408; 
 	SET @FechaHoy = '2024-01-01';
 
 
@@ -79,3 +79,5 @@ EXEC ELSTOREPROCEDURE @ResultCode --este es el SP que se encarga de todo lo refe
 					   , @MovsDiarios  
 					   , @NumeroTarjeta 
 					   , @FechaHoy
+
+

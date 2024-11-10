@@ -37,7 +37,8 @@ BEGIN
 
 --###############################################################################################################################
 --Declaracion de variables y tablas necesarias 
-
+		
+		--Tabla de a donde se insertaran los nuevos movimientos 
 		DECLARE @MovimientosTCM TABLE
 		(
 			Id INT IDENTITY(1,1) NOT NULL
@@ -49,9 +50,10 @@ BEGIN
 			, Referencia VARCHAR(32)
 			, IdTarjetaCreditoMaestra INT NOT NULL
 			, NuevoSaldo MONEY 
-			, EsSus BIT
+			, EsSus BIT DEFAULT 0
 		);
 
+		--tabla de donde se insertaran los movimientos sospechosos 
 		DECLARE @MovimientosSUS TABLE
 		(
 			Id INT IDENTITY(1,1) NOT NULL
@@ -63,11 +65,47 @@ BEGIN
 			, IdTarjetaCreditoMaestra INT NOT NULL
 		);
 
+		--tabla de donde se insertara la nueva TF 
+		DECLARE @NuevaTF TABLE
+		(
+			Id INT NOT NULL
+			, IdTarjeta INT NOT NULL
+			, Numero BIGINT NOT NULL
+			, CCV INT NOT NULL
+			, Pin INT NOT NULL 
+			, FechaCreacion DATE NOT NULL
+			, FechaVencimiento DATE NOT NULL
+			, EsValida BIT DEFAULT 1
+		);
+
+		--Tabla de donde se sacara los movimientos por interes corrientes
+		DECLARE @MovInteresesCorrientes TABLE
+		(
+			Id INT IDENTITY(1,1) NOT NULL
+			, IdTipoDeMovimiento INT NOT NULL
+			, IdEstadoDeCuenta INT NOT NULL 
+			, Fecha DATE NOT NULL 
+			, Monto MONEY NOT NULL
+			, IdTarjetaCreditoMaestra INT NOT NULL
+		);
+
+		--Tabla de donde se sacara los movimientos por interes moratorios
+		DECLARE @MovInteresesMoratorios TABLE
+		(
+			Id INT IDENTITY(1,1) NOT NULL
+			, IdTipoDeMovimiento INT NOT NULL
+			, IdEstadoDeCuenta INT NOT NULL 
+			, Fecha DATE NOT NULL 
+			, Monto MONEY NOT NULL
+			, IdTarjetaCreditoMaestra INT NOT NULL
+		);
+
 		--las variables necesarias 
 
         DECLARE @IdTCM INT
 				, @IdTCA INT
 				, @IdTarjeta INT
+				, @IdTFisica INT 
 				, @hi INT
 				, @lo INT
 				, @FechaMovimiento DATE
@@ -79,6 +117,12 @@ BEGIN
 				, @AcumulaVentana BIT 
 				, @AcumulaATM BIT 
 				, @MontoMov MONEY 
+				, @IdTipoTCM INT 
+				, @RecuperacionFlag BIT --dice si pidieron recuperacion 
+				, @NombreRecuperacion VARCHAR(64)
+				, @EsValida BIT 
+				, @CCV INT
+				, @Pin INT 
 				--Son de la TCM 
 				, @SaldoActual MONEY
 				, @SumaMovimientos MONEY
@@ -86,6 +130,8 @@ BEGIN
 				, @SaldoInteresMoratorios MONEY
 				, @PagoAcumuladosDelPeriodo MONEY  --Tambien es [SumaDePagos] del EC
 				--Son del EC ;
+				, @FechaPagoMinimo DATE
+				, @PagoMinimoMesAnterior MONEY
 				, @TCMOperacionesATM INT 
 				, @TCMOperacionesVentana INT 
 				, @TCMQDePagos INT
@@ -111,10 +157,33 @@ BEGIN
 
 --Ahora Asignacion de valores 
 
+		-- le ponemos un default de 0 
+		SET @RecuperacionFlag = 0; 
+
 		--Primero obtengamos el TCM asociado al TF
 		SELECT @IdTarjeta = TF.IdTarjeta
+			   , @IdTFisica = TF.Id --este id si es unico
+			   , @EsValida = TF.EsValida 
+			   , @Pin = TF.Pin
+			   , @CCV = TF.CCV
 		FROM [dbo].[TarjetaFisica] TF
-		WHERE TF.Numero = @InNumeroTarjeta;
+		WHERE TF.Numero = @InNumeroTarjeta  --hay que hacer eso para obtener la actual  ya que hay muchas a lo 
+		AND (@InFechaHoy >= TF.FechaCreacion AND @InFechaHoy <= TF.FechaVencimiento); --largo del tiempo 
+
+		--Si es valida queda nulo, significa que no existe tarjeta fisica valida 
+		--para este periodo
+		IF( @EsValida IS NULL)
+		BEGIN
+		--por ello buscamos la mas reciente
+			SELECT TOP 1 @IdTarjeta = TF.IdTarjeta
+				   , @IdTFisica = TF.Id
+				   , @EsValida = TF.EsValida --va a quedar en 0
+				   , @Pin = TF.Pin
+				   , @CCV = TF.CCV
+			FROM [dbo].[TarjetaFisica] TF
+			WHERE TF.Numero = @InNumeroTarjeta
+			ORDER BY TF.FechaCreacion DESC; 
+		END; 
 		
 		
 		IF EXISTS(SELECT 1 
@@ -135,12 +204,43 @@ BEGIN
 			SET @IdTCA = @IdTarjeta; 
 		END;
 
-
-
+		--seteamos el tipo de tcm 
+		SELECT @IdTipoTCM = TM.IdTipoTCM
+		FROM dbo.TarjetaCreditoMaestra TM
+		WHERE TM.IdTarjeta = @IdTCM; 
 		--Ahora Obtengamos los datos necesarios de la TCM con los que se trabajará
 		
 		SET @SumaMovimientos = 0; --estos son los movimientos en transito 
 
+
+--;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+/* Antes de seguir declarando variables es necesario ver si hoy es la fecha de 
+cierre de la TCM o TCA, ya que en ese caso hay que cambiar algunos datos y
+reiniciar y cerrar algunos otros
+*/
+--;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+		DECLARE @PosibleFin DATE
+				, @IdDePosibleFIn INT;
+
+		SELECT @PosibleFin = EC.FechaFin
+			   , @IdDePosibleFIn = EC.Id
+		FROM dbo.EstadoDeCuenta EC
+		WHERE EC.IdTCM = @IdTCM
+		AND EC.FechaFin <= @InFechaHoy
+		AND EC.FechaInicio >= @InFechaHoy
+
+		IF( @InFechaHoy = @PosibleFin)
+		BEGIN 
+		--Aqui realizaremos los cierres de estado de cuenta 
+			SELECT * FROM @MovimientosSUS; 
+		END; 
+
+
+--;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+/*
+Cierres de estados de cuenta listo. 
+*/
+--;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 		SELECT @SaldoActual = TCM.SaldoActual
 			   , @SaldoInteresesCorrientes = TCM.SaldoInteresesCorrientes
 			   , @SaldoInteresMoratorios = TCM.SaldoInteresMoratorios
@@ -160,9 +260,12 @@ BEGIN
 			   , @TCMSumaDeDebitos = EC.SumaDeDebitos
 			   , @TCMQDeDebitos = EC.CantidadDeDebitos
 			   , @TCMSumaDeCreditos = EC.SumaDeCreditos
-			   ,@TCMQDeCreditos =EC.CantidadDeCreditos
+			   , @TCMQDeCreditos =EC.CantidadDeCreditos
+			   , @FechaPagoMinimo = EC.FechaParaPagoMinimo
+			   , @PagoMinimoMesAnterior = EC.PagoMinimoMesAnterior
 		FROM dbo.EstadoDeCuenta EC 
-		WHERE EC.IdTCM = @IdTCM;
+		WHERE EC.IdTCM = @IdTCM
+		AND (@InFechaHoy >= EC.FechaInicio AND @InFechaHoy <= EC.FechaFin);
 
 		--Ahora los datos para la posible TCA Estado de Cuenta
 
@@ -178,18 +281,18 @@ BEGIN
 				   , @TCASumaDeDebitos = EA.SumaDeDebitos
 				   , @TCASumaDeCreditos = EA.SumaDeCreditos
 			FROM dbo.EstadoDeCuentaAdicional EA
-			WHERE EA.IdTCA = @IdTCA;
+			WHERE EA.IdTCA = @IdTCA
+			AND (@InFechaHoy >= EA.FechaInicio AND @InFechaHoy <= EA.FechaFin);
 		END; 
 
 		--Saquemos las fechas de la TF
 		SELECT @FechaCreacionTF = TF.FechaCreacion
 		FROM dbo.TarjetaFisica TF
-		WHERE TF.Numero = @InNumeroTarjeta
+		WHERE TF.Id = @IdTFisica; --lo buscamos con su id unico
 
-		--la funcion COALESCE elige el primer no nulo de los dos
-		SELECT @FechaMuerteTF = COALESCE(TF.FechaInvalidacion, TF.FechaVencimiento)
+		SELECT @FechaMuerteTF =  TF.FechaVencimiento
 		FROM dbo.TarjetaFisica TF
-		WHERE TF.Numero = @InNumeroTarjeta;
+		WHERE TF.Id = @IdTFisica; --lo buscamos con su id unico
 
 		--ahora saquemos los movimientos que vamos a procesar 	
 
@@ -212,7 +315,8 @@ BEGIN
 			   , @IdTCM
 		FROM @InMovsDiarios MV 
 		INNER JOIN [dbo].[TiposDeMovimiento] TV ON TV.Nombre = MV.Nombre 
-		INNER JOIN [dbo].[EstadoDeCuenta] EC ON EC.IdTCM = @IdTCM
+		INNER JOIN [dbo].[EstadoDeCuenta] EC ON (EC.IdTCM = @IdTCM) 
+												AND (@InFechaHoy >= EC.FechaInicio AND @InFechaHoy <= EC.FechaFin)
 		WHERE MV.TarjetaFisica = @InNumeroTarjeta; 
 
 --###############################################################################################################################	
@@ -230,11 +334,22 @@ BEGIN
 		
 		SELECT @FechaMovimiento = T.Fecha
 			   , @MontoMov = T.Monto 
+			   , @NombreMovimiento = TM.Nombre
 		FROM @MovimientosTCM T
+		INNER JOIN dbo.TiposDeMovimiento TM ON TM.Id = T.IdTipoDeMovimiento
 		WHERE T.Id = @lo;
 
+		IF(SUBSTRING(@NombreMovimiento, 1, 12) = 'Recuperacion')
+		BEGIN
+		
+		SET @RecuperacionFlag = 1;
+		SET @NombreRecuperacion = @NombreMovimiento;
 
-		IF(@FechaMovimiento < @FechaCreacionTF OR @FechaMovimiento > @FechaMuerteTF)
+		DELETE FROM @MovimientosTCM
+		WHERE Id = @lo
+
+		END
+		ELSE IF(@EsValida = 0) 
 		BEGIN
 			--Se marca como Sospechoso 
 			UPDATE @MovimientosTCM
@@ -274,10 +389,8 @@ BEGIN
 			SELECT @Accion = TV.Accion
 				   , @AcumulaATM = TV.AcumulaOperacionATM
 				   , @AcumulaVentana = TV.AcumulaOperacionVentana
-				   , @NombreMovimiento = TV.Nombre
 			FROM dbo.TiposDeMovimiento TV 
-			WHERE TV.Id = @IdTipoDeMovimiento;
-
+			WHERE TV.Id = @IdTipoDeMovimiento;		
 
 			--Lo usamos mas adelante 
 			DECLARE @EsCompra BIT = CASE WHEN @IdTipoDeMovimiento = 1 THEN 1 ELSE 0 END;
@@ -358,8 +471,6 @@ BEGIN
 				END;
 
 			END;
-
-
 			
 			--Actualizamos el saldo actual de los movimientos 
 			UPDATE @MovimientosTCM
@@ -370,6 +481,299 @@ BEGIN
 
 		SET @lo += 1;
 	END;
+
+--##############################################################################################################################
+
+	-- Ya que preprocesamos todos los movimientos toca revisar si hace falta renovar la TF
+	-- o bien si hay que expedir otra ya que se perdio
+
+	DECLARE @NuevoVencimiento DATE
+			, @IdRegla INT 
+			, @IdTipoDeReposicion INT
+			, @MontoRenovacion MONEY;
+
+	--Osea, si hoy vence y no se perdio
+	IF(@InFechaHoy = @FechaMuerteTF AND @EsValida = 1 AND @RecuperacionFlag = 0) 
+	BEGIN 
+
+	--Primero cerremos la actual 
+	SET @EsValida = 0; 
+
+	--revisamos las reglas de negocio en caso de ser TCA 
+		IF( @IdTCA IS NOT NULL)
+		BEGIN 
+			SET @NuevoVencimiento = DATEADD(YEAR, 3, @FechaMuerteTF)
+			--Tambien hay que generar el cargo por renovacion 
+
+			SELECT @IdRegla = RN.Id
+			FROM dbo.ReglasDeNegocio RN
+			WHERE RN.Nombre = 'Cargo renovacion de TF de TCA'
+			AND RN.IdTipoDeTCM = @IdTipoTCM; 
+
+			SELECT @MontoRenovacion = RN.Valor
+			FROM dbo.RNMonto RN 
+			WHERE RN.IdReglaNegocio = @IdRegla;
+		END
+		ELSE
+		BEGIN
+			--ahora toca el caso de que sea TCM
+			SET @NuevoVencimiento = DATEADD(YEAR, 5, @FechaMuerteTF)
+			--Tambien hay que generar el cargo por renovacion 
+
+			SELECT @IdRegla = RN.Id
+			FROM dbo.ReglasDeNegocio RN
+			WHERE RN.Nombre = 'Cargo renovacion de TF de TCM'
+			AND RN.IdTipoDeTCM = @IdTipoTCM; 
+
+			SELECT @MontoRenovacion = RN.Valor
+			FROM dbo.RNMonto RN 
+			WHERE RN.IdReglaNegocio = @IdRegla;
+		END;
+
+	--creamos la nueva TF 
+	INSERT INTO @NuevaTF 
+	(
+		Id
+		, IdTarjeta 
+		, Numero 
+		, CCV 
+		, Pin 
+		, FechaCreacion 
+		, FechaVencimiento 
+	)
+	VALUES
+	(
+		(SELECT MAX(TF.Id)
+		FROM dbo.TarjetaFisica TF) +1
+		, @IdTarjeta
+		, @InNumeroTarjeta
+		, @CCV
+		, @Pin
+		, @InFechaHoy 
+		, @NuevoVencimiento
+	)
+
+	--Creamos el movimiento 
+	INSERT INTO @MovimientosTCM 
+	(
+		IdTipoDeMovimiento 
+		, IdEstadoDeCuenta 
+		, Fecha 
+		, Monto 
+		, Descripcion
+		, Referencia 
+		, IdTarjetaCreditoMaestra 
+		, NuevoSaldo 
+	)
+	VALUES
+	(
+		(SELECT TM.Id
+		FROM dbo.TiposDeMovimiento TM
+		WHERE TM.Nombre = 'Renovacion de TF')
+		, (SELECT TOP 1 TM.IdEstadoDeCuenta
+		  FROM @MovimientosTCM TM)
+		, @InFechaHoy
+		, @MontoRenovacion
+		, 'Renovacion por vencimiento de TF'
+		, ' '
+		, @IdTCM 
+		, (SELECT TOP 1 TM.NuevoSaldo
+		  FROM @MovimientosTCM TM
+		  ORDER BY TM.Id DESC) -@MontoRenovacion	
+	);
+
+	END;
+
+
+	IF(@RecuperacionFlag = 1) 
+	BEGIN 
+
+	--Primero cerremos la actual 
+	SET @EsValida = 0; 
+
+	--revisamos las reglas de negocio en caso de ser TCA 
+		IF( @IdTCA IS NOT NULL)
+		BEGIN 
+			SET @NuevoVencimiento = DATEADD(YEAR, 3, @FechaMuerteTF)
+			--Tambien hay que generar el cargo por renovacion 
+
+			SELECT @IdRegla = RN.Id
+			FROM dbo.ReglasDeNegocio RN
+			WHERE RN.Nombre = 'Reposicion de tarjeta de TCA'
+			AND RN.IdTipoDeTCM = @IdTipoTCM; 
+
+			SELECT @MontoRenovacion = RN.Valor
+			FROM dbo.RNMonto RN 
+			WHERE RN.IdReglaNegocio = @IdRegla;
+		END
+		ELSE
+		BEGIN
+			--ahora toca el caso de que sea TCM
+			SET @NuevoVencimiento = DATEADD(YEAR, 5, @FechaMuerteTF)
+			--Tambien hay que generar el cargo por renovacion 
+
+			SELECT @IdRegla = RN.Id
+			FROM dbo.ReglasDeNegocio RN
+			WHERE RN.Nombre = 'Reposicion de tarjeta de TCM'
+			AND RN.IdTipoDeTCM = @IdTipoTCM; 
+
+			SELECT @MontoRenovacion = RN.Valor
+			FROM dbo.RNMonto RN 
+			WHERE RN.IdReglaNegocio = @IdRegla;
+		END;
+
+	--creamos la nueva TF 
+	INSERT INTO @NuevaTF 
+	(
+		Id
+		, IdTarjeta 
+		, Numero 
+		, CCV 
+		, Pin 
+		, FechaCreacion 
+		, FechaVencimiento 
+	)
+	VALUES
+	(
+		(SELECT MAX(TF.Id)
+		FROM dbo.TarjetaFisica TF) +1
+		, @IdTarjeta
+		, @InNumeroTarjeta
+		, @CCV
+		, @Pin
+		, @InFechaHoy 
+		, @NuevoVencimiento
+	)
+
+	--Creamos el movimiento 
+	INSERT INTO @MovimientosTCM 
+	(
+		IdTipoDeMovimiento 
+		, IdEstadoDeCuenta 
+		, Fecha 
+		, Monto 
+		, Descripcion
+		, Referencia 
+		, IdTarjetaCreditoMaestra 
+		, NuevoSaldo 
+	)
+	VALUES
+	(
+		(SELECT TM.Id
+		FROM dbo.TiposDeMovimiento TM
+		WHERE TM.Nombre = @NombreRecuperacion)
+		, (SELECT TOP 1 TM.IdEstadoDeCuenta
+		  FROM @MovimientosTCM TM)
+		, @InFechaHoy
+		, @MontoRenovacion
+		, @NombreRecuperacion
+		, ' '
+		, @IdTCM 
+		, (SELECT TOP 1 TM.NuevoSaldo
+		  FROM @MovimientosTCM TM
+		  ORDER BY TM.Id DESC) - @MontoRenovacion	
+	);
+
+	END;
+		
+--##############################################################################################################################
+	--Ahora nos encargaremos de realizar los movimientos por intereses Corrientes
+
+	DECLARE @MontoInteresCorrientes MONEY
+			, @TasaInteresCorriente REAl
+			, @IdTasaInteresCorriente INT;
+
+	
+	IF(@SaldoActual > 0)
+	BEGIN 
+		
+		SELECT @IdTasaInteresCorriente = RN.Id
+		FROM dbo.ReglasDeNegocio RN
+		WHERE RN.Nombre = 'Tasa de interes corriente'
+		AND RN.IdTipoDeTCM = @IdTipoTCM; 
+
+		SELECT @TasaInteresCorriente = RN.Valor
+		FROM dbo.RNTasa RN
+		WHERE RN.IdReglaNegocio = @IdTasaInteresCorriente;
+
+
+		SET @MontoInteresCorrientes = ((@SaldoActual/@TasaInteresCorriente)/100)/30;
+
+		SET @SaldoInteresesCorrientes += @MontoInteresCorrientes;
+
+		INSERT INTO @MovInteresesCorrientes 
+		(
+			IdTipoDeMovimiento 
+			, IdEstadoDeCuenta 
+			, Fecha 
+			, Monto 
+			, IdTarjetaCreditoMaestra 
+		)
+		VALUES
+		(
+			(SELECT TM.Id
+			FROM dbo.TiposDeMovimiento TM 
+			WHERE TM.Nombre = 'Intereses Corrientes sobre Saldo')
+			, (SELECT TOP 1 TM.IdEstadoDeCuenta
+			  FROM @MovimientosTCM TM)
+			, @InFechaHoy
+			, @MontoInteresCorrientes 
+			, @IdTCM
+		)
+	END;
+
+
+--##############################################################################################################################
+	--Ahora nos encargaremos de aplicar los movimientos por intereses moratorios
+
+	DECLARE @MontoInteresMoratorio MONEY
+			, @MontoPagoMinimo MONEY
+			, @TasaInteresMoratorio REAl
+			, @IdTasaInteresMoratorio INT;
+
+	
+	IF(@InFechaHoy > @FechaPagoMinimo AND @PagoAcumuladosDelPeriodo < @PagoMinimoMesAnterior)
+	BEGIN 
+		
+		SELECT @IdTasaInteresMoratorio = RN.Id
+		FROM dbo.ReglasDeNegocio RN
+		WHERE RN.Nombre = 'intereses moratorios'
+		AND RN.IdTipoDeTCM = @IdTipoTCM; 
+
+		SELECT @TasaInteresMoratorio = RN.Valor
+		FROM dbo.RNTasa RN
+		WHERE RN.IdReglaNegocio = @IdTasaInteresMoratorio;
+
+		SET @MontoPagoMinimo = @PagoMinimoMesAnterior - @PagoAcumuladosDelPeriodo
+
+		SET @MontoInteresMoratorio = ((@MontoPagoMinimo/@TasaInteresMoratorio)/100)/30
+
+		SET @SaldoInteresMoratorios = @MontoInteresMoratorio; 
+
+		INSERT INTO @MovInteresesMoratorios 
+		(
+			IdTipoDeMovimiento 
+			, IdEstadoDeCuenta 
+			, Fecha 
+			, Monto 
+			, IdTarjetaCreditoMaestra 
+		)
+		VALUES
+		(
+			(SELECT TM.Id
+			FROM dbo.TiposDeMovimiento TM 
+			WHERE TM.Nombre = 'Intereses Moratorios Pago no Realizado')
+			, (SELECT TOP 1 TM.IdEstadoDeCuenta
+			  FROM @MovimientosTCM TM)
+			, @InFechaHoy
+			, @MontoInteresCorrientes 
+			, @IdTCM
+		)
+		
+	END;
+	
+--##############################################################################################################################
+
 
 
 	SELECT V.Nombre, * FROM @MovimientosTCM M
@@ -396,7 +800,8 @@ BEGIN
 	SELECT @TCAQDeRetiros as qretiro;
 	SELECT @TCASumaDeDebitos as qdebito;
 	SELECT @TCASumaDeCreditos as qcredito;
-
+	
+	SELECT * FROM @NuevaTF AS NUEVAS;
 	
         
 
