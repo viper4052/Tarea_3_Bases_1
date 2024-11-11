@@ -60,19 +60,14 @@ INSERT INTO @MovsDiarios
 			Referencia = z.value('@Referencia', 'VARCHAR(32)')			
         FROM XmlCol.nodes('fechaOperacion/Movimiento/Movimiento') AS T(z)
     ) AS result
-    WHERE F.Id = 1;
-
-
-
-
-
+    WHERE F.Id = 7
 
 	DECLARE @ResultCode INT 
 			, @NumeroTarjeta BIGINT
 			, @FechaHoy DATE;
 
-	SET @NumeroTarjeta = 2256488286809408; 
-	SET @FechaHoy = '2024-01-01';
+	SET @NumeroTarjeta = 9544162405780883; 
+	SET @FechaHoy = '2024-01-15';
 
 
 EXEC ELSTOREPROCEDURE @ResultCode --este es el SP que se encarga de todo lo referente a la TCM
@@ -81,3 +76,21 @@ EXEC ELSTOREPROCEDURE @ResultCode --este es el SP que se encarga de todo lo refe
 					   , @FechaHoy
 
 
+/*
+
+	DECLARE @Rotulo VARCHAR(128);
+
+
+	SET @Rotulo ='SIGAMOS CON EL SIGUIENTE'
+	SET @FechaHoy = '2024-01-08';
+
+	SELECT @Rotulo;
+
+
+EXEC ELSTOREPROCEDURE @ResultCode --este es el SP que se encarga de todo lo referente a la TCM
+					   , @MovsDiarios2  
+					   , @NumeroTarjeta 
+					   , @FechaHoy
+
+
+*/

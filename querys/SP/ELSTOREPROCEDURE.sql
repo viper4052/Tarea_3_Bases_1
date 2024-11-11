@@ -100,6 +100,64 @@ BEGIN
 			, IdTarjetaCreditoMaestra INT NOT NULL
 		);
 
+
+		--Aqui se guardara el nuevo estado de cuenta en fecha de cierre 
+		DECLARE @NuevoEstadoCuenta TABLE
+		(
+			Id INT 
+			, FechaInicio DATE
+			, FechaFin DATE 
+			, PagoMinimoMesAnterior MONEY
+			, FechaParaPagoMinimo DATE 
+			, InteresesMoratorios MONEY
+			, InteresesCorrientes MONEY 
+			, CantidadOperacionesATM INT 
+			, CantidadOperacionesVentana INT 
+			, SumaDePagos MONEY
+			, CantidadDePagos INT
+			, SumaDeCompras MONEY
+			, CantidadDeCompras INT
+			, SumaDeRetiros MONEY
+			, CantidadDeRetiros INT 
+			, SumaDeCreditos MONEY 
+			, CantidadDeCreditos INT 
+			, SumaDeDebitos MONEY 
+			, CantidadDeDebitos INT 
+			, IdTCM INT 
+			, PagoDeContado MONEY 
+		);
+
+		DECLARE @EstadosDeCuentaTCA TABLE
+		(
+			Id INT IDENTITY(1,1)
+			, FechaInicio DATE
+			, FechaFin DATE
+			, CantidadOperacionesATM INT
+			, CantidadOperacionesVentana INT
+			, SumaDeCompras MONEY
+			, CantidadDeCompras INT
+			, SumaDeRetiros MONEY
+			, CantidadDeRetiros INT
+			, SumaDeCreditos MONEY
+			, SumaDeDebitos MONEY
+			, IdTCM INT
+			, IdTCA InT
+		); 
+
+		--Aqui se guardara los movimientos de fecha de cierre 
+		DECLARE @MovimientoCierreCuenta TABLE
+		(
+			Id INT IDENTITY(1,1) NOT NULL
+			, IdTipoDeMovimiento INT NOT NULL
+			, IdEstadoDeCuenta INT NOT NULL
+			, Fecha DATE NOT NULL 
+			, Monto MONEY NOT NULL
+			, Descripcion VARCHAR(256)
+			, Referencia VARCHAR(32)
+			, IdTarjetaCreditoMaestra INT NOT NULL
+			, NuevoSaldo MONEY 
+		);
+
 		--las variables necesarias 
 
         DECLARE @IdTCM INT
@@ -157,10 +215,13 @@ BEGIN
 
 --Ahora Asignacion de valores 
 
-		-- le ponemos un default de 0 
+		-- Iniciamos algunos valores en 0 
 		SET @RecuperacionFlag = 0; 
+		SET @SumaMovimientos = 0; --estos son los movimientos en transito 
+
 
 		--Primero obtengamos el TCM asociado al TF
+--#################################################################
 		SELECT @IdTarjeta = TF.IdTarjeta
 			   , @IdTFisica = TF.Id --este id si es unico
 			   , @EsValida = TF.EsValida 
@@ -209,8 +270,8 @@ BEGIN
 		FROM dbo.TarjetaCreditoMaestra TM
 		WHERE TM.IdTarjeta = @IdTCM; 
 		--Ahora Obtengamos los datos necesarios de la TCM con los que se trabajará
-		
-		SET @SumaMovimientos = 0; --estos son los movimientos en transito 
+--#################################################################
+
 
 
 --;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -219,21 +280,398 @@ cierre de la TCM o TCA, ya que en ese caso hay que cambiar algunos datos y
 reiniciar y cerrar algunos otros
 */
 --;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 		DECLARE @PosibleFin DATE
-				, @IdDePosibleFIn INT;
+				, @IdDePosibleFIn INT
+				, @IdReglaNegocio INT
+				, @QDias INT
+				, @PagoDeContado MONEY 
+				, @FechaDeCierre DATE;
 
 		SELECT @PosibleFin = EC.FechaFin
 			   , @IdDePosibleFIn = EC.Id
 		FROM dbo.EstadoDeCuenta EC
 		WHERE EC.IdTCM = @IdTCM
-		AND EC.FechaFin <= @InFechaHoy
-		AND EC.FechaInicio >= @InFechaHoy
+		AND EC.FechaFin >= @InFechaHoy
+		AND EC.FechaInicio <= @InFechaHoy
 
+
+		SET @PosibleFin = '2024-01-15';
 		IF( @InFechaHoy = @PosibleFin)
-		BEGIN 
+		BEGIN --###########################################################################################
+
 		--Aqui realizaremos los cierres de estado de cuenta 
-			SELECT * FROM @MovimientosSUS; 
+
+		--Bueno primero que todo realizemos los cargos mensuales a la tarjeta 
+
+		--#1 apliquemos el sado por el intereses corriente y moratorios
+		DECLARE @SaldoAcumuladoIntCorrientes MONEY
+				, @SaldoAcumuladoIntMoratorios MONEY
+				, @SaldoFechaFin MONEY    --todo esto deber ser actualizado en TCM y EC en Transaccion 
+				, @QCreditosFechaFin INT
+				, @QDebitosFechaFin INT
+				, @SumaCreditosFechaFin MONEY
+				, @SumaDebitosFechaFin MONEY; 
+
+		SELECT @SaldoAcumuladoIntCorrientes = EC.InteresesCorrientes
+			   , @SaldoAcumuladoIntMoratorios = EC.InteresesMoratorios
+		FROM dbo.EstadoDeCuenta EC 
+		WHERE EC.Id = @IdDePosibleFIn;
+
+
+		SELECT @SaldoFechaFin = TC.SaldoActual
+		FROM dbo.TarjetaCreditoMaestra TC
+		WHERE TC.IdTarjeta = @IdTCM;
+
+
+		SET @SaldoFechaFin = @SaldoFechaFin + @SaldoAcumuladoIntCorrientes;
+		SET @SumaCreditosFechaFin += @SaldoAcumuladoIntCorrientes;
+		SET @QCreditosFechaFin += 1; 
+
+		INSERT INTO @MovimientoCierreCuenta
+		(
+			IdTipoDeMovimiento 
+			, IdEstadoDeCuenta 
+			, Fecha 
+			, Monto 
+			, Descripcion 
+			, Referencia 
+			, IdTarjetaCreditoMaestra 
+			, NuevoSaldo 
+		)
+		VALUES
+		(13, @IdDePosibleFIn, @InFechaHoy
+		, @SaldoAcumuladoIntCorrientes, 'Aplicacion de saldo por interes corrientes'
+		, ' ', @IdTCM, @SaldoFechaFin),
+		(14, @IdDePosibleFIn, @InFechaHoy
+		, @SaldoAcumuladoIntMoratorios, 'Aplicacion de saldo por interes moratorio'
+		, ' ', @IdTCM, (@SaldoFechaFin-@SaldoAcumuladoIntMoratorios));
+
+		SET @SaldoFechaFin = @SaldoFechaFin - @SaldoAcumuladoIntMoratorios;
+		SET @SumaCreditosFechaFin -= @SaldoAcumuladoIntMoratorios;
+		SET @QDebitosFechaFin += 1; 
+
+
+		--#2 ahora los cargos de servicio por las TCM y TCA
+
+		DECLARE @IdCargoServicio INT
+				, @CargoPorServicio MONEY
+				, @CargoPorTCAs MONEY; 
+
+		SELECT @IdCargoServicio = RN.Id
+		FROM dbo.ReglasDeNegocio RN
+		WHERE RN.Nombre = 'Cargos Servicio Mensual TCM'
+		AND RN.IdTipoDeTCM = @IdTipoTCM;
+
+		SELECT @CargoPorServicio = RM.Valor
+		FROM dbo.RNMonto RM
+		WHERE RM.IdReglaNegocio = @IdCargoServicio
+
+
+		SELECT @IdCargoServicio = RN.Id
+		FROM dbo.ReglasDeNegocio RN
+		WHERE RN.Nombre = 'Cargos Servicio Mensual TCA'
+		AND RN.IdTipoDeTCM = @IdTipoTCM;
+
+
+		SELECT @CargoPorTCAs = RM.Valor
+		FROM dbo.RNMonto RM
+		WHERE RM.IdReglaNegocio = @IdCargoServicio
+
+
+		--aplicamos el cargo para todas las TCAs de la TCM
+		SET @CargoPorServicio += (SELECT COUNT(*)
+					             FROM [dbo].[TarjetaCreditoAdicional] TCA
+								 WHERE TCA.IdTCM = @IdTCM) * @CargoPorTCAs;
+
+		SET @SaldoFechaFin -= @CargoPorServicio;
+		SET @SumaCreditosFechaFin -= @CargoPorServicio;
+		SET @QDebitosFechaFin += 1; 
+
+		INSERT INTO @MovimientoCierreCuenta
+		(
+			IdTipoDeMovimiento 
+			, IdEstadoDeCuenta 
+			, Fecha 
+			, Monto 
+			, Descripcion 
+			, Referencia 
+			, IdTarjetaCreditoMaestra 
+			, NuevoSaldo 
+		)
+		VALUES
+		(10, @IdDePosibleFIn, @InFechaHoy
+		, @CargoPorServicio, 'Aplicacion de cargos por servicio de Tarjetas de Credito'
+		, ' ', @IdTCM, @SaldoFechaFin)
+
+
+		--#3 ahora apliquemos el seguro contra fraudes 
+
+		DECLARE @IdSeguroFraude INT
+				, @CargoPorSeguroFraude MONEY; 
+
+
+		SELECT @IdCargoServicio = RN.Id
+		FROM dbo.ReglasDeNegocio RN
+		WHERE RN.Nombre = 'Cargo Seguro Contra Fraudes'
+		AND RN.IdTipoDeTCM = @IdTipoTCM;
+
+		SELECT @CargoPorSeguroFraude = RM.Valor
+		FROM dbo.RNMonto RM
+		WHERE RM.IdReglaNegocio = @IdCargoServicio
+
+
+		SET @SaldoFechaFin -= @CargoPorSeguroFraude;
+		SET @SumaCreditosFechaFin -= @CargoPorSeguroFraude;
+		SET @QDebitosFechaFin += 1; 
+
+		INSERT INTO @MovimientoCierreCuenta
+		(
+			IdTipoDeMovimiento 
+			, IdEstadoDeCuenta 
+			, Fecha 
+			, Monto 
+			, Descripcion 
+			, Referencia 
+			, IdTarjetaCreditoMaestra 
+			, NuevoSaldo 
+		)
+		VALUES
+		(10, @IdDePosibleFIn, @InFechaHoy
+		, @CargoPorSeguroFraude, 'Aplicacion de seguro contra fraudes'
+		, ' ', @IdTCM, @SaldoFechaFin)
+
+
+		--#4 Finalmente revisemos si se excedio el uso de ventanilla o ATM 
+
+		DECLARE @Qventanilla INT
+				, @QATM INT 
+				, @QventanillaMax INT
+				, @QATMmax INT
+				, @MultaATM MONEY
+				, @MultaVentanilla MONEY;
+
+		SELECT @Qventanilla = EC.CantidadOperacionesVentana
+			   , @QATM = EC.CantidadOperacionesATM
+		FROM dbo.EstadoDeCuenta EC
+		WHERE EC.Id = @IdDePosibleFIn; 
+
+
+		SELECT @IdReglaNegocio = R.Id 
+		FROM dbo.ReglasDeNegocio R
+		WHERE R.Nombre = 'Cantidad de operaciones en ATM'
+		AND R.IdTipoDeTCM = @IdTipoTCM; 
+
+		SELECT @QATMmax = RM.Valor
+		FROM dbo.RNMonto RM
+		WHERE RM.IdReglaNegocio = @IdReglaNegocio 
+
+
+		--obtengamos el maximo en ventanilla 
+		SELECT @IdReglaNegocio = R.Id 
+		FROM dbo.ReglasDeNegocio R
+		WHERE R.Nombre = 'Cantidad de operacion en Ventanilla'
+		AND R.IdTipoDeTCM = @IdTipoTCM; 
+
+		SELECT @QventanillaMax = RM.Valor
+		FROM dbo.RNMonto RM
+		WHERE RM.IdReglaNegocio = @IdReglaNegocio 
+
+		IF( @QATM > @QATMmax)
+		BEGIN
+			--ahora obtengamos cuanto costarian las multas 
+
+			SELECT @IdReglaNegocio = R.Id 
+			FROM dbo.ReglasDeNegocio R
+			WHERE R.Nombre = 'Multa exceso de operaciones ATM'
+			AND R.IdTipoDeTCM = @IdTipoTCM; 
+
+			SELECT @MultaATM = RM.Valor
+			FROM dbo.RNMonto RM
+			WHERE RM.IdReglaNegocio = @IdReglaNegocio 
+
+			SET @SaldoFechaFin -= @MultaATM;
+			SET @SumaCreditosFechaFin -= @MultaATM;
+			SET @QDebitosFechaFin += 1; 
+
+			INSERT INTO @MovimientoCierreCuenta
+			(
+				IdTipoDeMovimiento 
+				, IdEstadoDeCuenta 
+				, Fecha 
+				, Monto 
+				, Descripcion 
+				, Referencia 
+				, IdTarjetaCreditoMaestra 
+				, NuevoSaldo 
+			)
+			VALUES
+			(11, @IdDePosibleFIn, @InFechaHoy
+			, @MultaATM, 'cargo por exceso ATM'
+			, ' ', @IdTCM, @SaldoFechaFin)
+
 		END; 
+
+		IF( @Qventanilla > @QventanillaMax)
+		BEGIN
+			--ahora obtengamos cuanto costarian las multas 
+
+			SELECT @IdReglaNegocio = R.Id 
+			FROM dbo.ReglasDeNegocio R
+			WHERE R.Nombre = 'Multa exceso de operaciones Ventanilla'
+			AND R.IdTipoDeTCM = @IdTipoTCM; 
+
+			SELECT @MultaVentanilla = RM.Valor
+			FROM dbo.RNMonto RM
+			WHERE RM.IdReglaNegocio = @IdReglaNegocio 
+
+			
+			SET @SaldoFechaFin -= @MultaVentanilla;
+			SET @SumaCreditosFechaFin -= @MultaVentanilla;
+			SET @QDebitosFechaFin += 1; 
+
+			INSERT INTO @MovimientoCierreCuenta
+			(
+				IdTipoDeMovimiento 
+				, IdEstadoDeCuenta 
+				, Fecha 
+				, Monto 
+				, Descripcion 
+				, Referencia 
+				, IdTarjetaCreditoMaestra 
+				, NuevoSaldo 
+			)
+			VALUES
+			(12, @IdDePosibleFIn, @InFechaHoy
+			, @MultaVentanilla, 'cargo por exceso ventanilla'
+			, ' ', @IdTCM, @SaldoFechaFin)
+		END; 
+
+
+		--################################################################
+		/*listo, ya que aplicamos los cargos finales toca calcular el nuevo 
+		estado de cuenta*/
+
+
+		--asi que pongamos los datos del que sera el nuevo en @NuevoEstadoCuenta
+
+		SET @PagoDeContado = @SaldoFechaFin;
+
+		
+		--hagamos el calculo de la fecha de pago minimo 
+		SELECT @IdReglaNegocio = R.Id 
+		FROM dbo.ReglasDeNegocio R
+		WHERE R.Nombre = 'Cantidad de dias para pago saldo de contado'
+		AND R.IdTipoDeTCM = @IdTipoTCM; 
+
+		SELECT @QDias = R.Valor
+		FROM dbo.RNQDias R
+		WHERE R.IdReglaNegocio = @IdReglaNegocio;
+
+		--preprocesamos Fecha de cierre y de pago minimo
+		SET @FechaDeCierre = dbo.FechaDeCierre(@InFechaHoy);
+
+		SET @FechaPagoMinimo = DATEADD(DAY, @QDias, @FechaDeCierre);
+
+
+		--calculemos el pago minimo del mes anterior
+		DECLARE @Pagominimo MONEY
+				, @CuotaMensual INT; 
+		
+		SELECT @IdReglaNegocio = R.Id 
+		FROM dbo.ReglasDeNegocio R
+		WHERE R.Nombre = 'Cantidad de cuotas para pago minimo'
+		AND R.IdTipoDeTCM = @IdTipoTCM; 
+
+		SELECT @CuotaMensual = RM.Valor
+		FROM [dbo].[RNQMeses] RM
+		WHERE RM.IdReglaNegocio = @IdReglaNegocio 
+
+		SET @Pagominimo = (@PagoDeContado)/@CuotaMensual;
+
+		--Insertamos en la tabla lo que será el estado de cuenta
+		INSERT INTO @NuevoEstadoCuenta
+		(
+			Id
+			, FechaInicio
+			, FechaFin 
+			, PagoMinimoMesAnterior 
+			, FechaParaPagoMinimo 
+			, InteresesMoratorios 
+			, InteresesCorrientes  
+			, CantidadOperacionesATM 
+			, CantidadOperacionesVentana 
+			, SumaDePagos 
+			, CantidadDePagos 
+			, SumaDeCompras 
+			, CantidadDeCompras 
+			, SumaDeRetiros 
+			, CantidadDeRetiros 
+			, SumaDeCreditos  
+			, CantidadDeCreditos 
+			, SumaDeDebitos  
+			, CantidadDeDebitos 
+			, IdTCM 
+			, PagoDeContado 
+		)
+		VALUES
+		(
+			1 --este id realmente no se usara luego
+			, @InFechaHoy
+			, @FechaDeCierre
+			, @Pagominimo
+			, @FechaPagoMinimo
+			, 0
+			, 0 
+			, 0
+			, 0
+			, 0
+			, 0
+			, 0
+			, 0
+			, 0
+			, 0
+			, 0
+			, 0
+			, 0
+			, 0
+			, @IdTCM
+			, @PagoDeContado
+		)
+
+
+		--tambien creamos los nuevos estados de cuenta adicionales
+		INSERT INTO @EstadosDeCuentaTCA
+		(
+			FechaInicio
+			, FechaFin
+			, CantidadOperacionesATM
+			, CantidadOperacionesVentana
+			, SumaDeCompras
+			, CantidadDeCompras
+			, SumaDeRetiros
+			, CantidadDeRetiros
+			, SumaDeCreditos
+			, SumaDeDebitos
+			, IdTCM
+			, IdTCA
+		)
+		SELECT @InFechaHoy
+			   , @FechaDeCierre
+			   , 0 
+			   , 0
+			   , 0
+			   , 0
+			   , 0
+			   , 0
+			   , 0 
+			   , 0
+			   , @IdTCM
+			   , TA.IdTarjeta
+		FROM dbo.TarjetaCreditoAdicional TA 
+		WHERE TA.IdTCM = @IdTCM; --insertamos uno para cada TCA
+
+		END; --###########################################################################################
 
 
 --;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -241,6 +679,9 @@ reiniciar y cerrar algunos otros
 Cierres de estados de cuenta listo. 
 */
 --;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+		--Obtengamos los valores referentes a la TCM
+		--si es dia de cierre de estado de cuenta hay que ponerlos en 0
 		SELECT @SaldoActual = TCM.SaldoActual
 			   , @SaldoInteresesCorrientes = TCM.SaldoInteresesCorrientes
 			   , @SaldoInteresMoratorios = TCM.SaldoInteresMoratorios
@@ -248,8 +689,38 @@ Cierres de estados de cuenta listo.
 		FROM dbo.TarjetaCreditoMaestra TCM
 		WHERE TCM.IdTarjeta = @IdTCM;
 
+		IF( @InFechaHoy = @PosibleFin)
+		BEGIN 
+			SET @SaldoActual = 0;
+			SET @SaldoInteresesCorrientes = 0;
+			SET @SaldoInteresMoratorios = 0;
+			SET @PagoAcumuladosDelPeriodo = 0;
+		END;
+
 		--Ahora los datos para el Estado de Cuenta de la TCM
+		--Tambien, si es fecha de cierre hay que poner estos datos con base
+		-- en la columna que hay en @NuevoEstadoCuenta.
 		
+		IF( @InFechaHoy = @PosibleFin)
+		BEGIN 
+			SELECT @TCMOperacionesATM = EC.CantidadOperacionesATM
+			   , @TCMOperacionesVentana = EC.CantidadOperacionesVentana
+			   , @TCMQDePagos = EC.CantidadDePagos
+			   , @TCMSumaDeCompras = EC.SumaDeCompras
+			   , @TCMQDeCompras = EC.CantidadDeCompras
+			   , @TCMSumaDeRetiros = EC.SumaDeRetiros
+			   , @TCMQDeRetiros = EC.CantidadDeRetiros
+			   , @TCMSumaDeDebitos = EC.SumaDeDebitos
+			   , @TCMQDeDebitos = EC.CantidadDeDebitos
+			   , @TCMSumaDeCreditos = EC.SumaDeCreditos
+			   , @TCMQDeCreditos =EC.CantidadDeCreditos
+			   , @FechaPagoMinimo = EC.FechaParaPagoMinimo
+			   , @PagoMinimoMesAnterior = EC.PagoMinimoMesAnterior
+		FROM @NuevoEstadoCuenta EC 
+		WHERE EC.IdTCM = @IdTCM
+		END
+		ELSE
+		BEGIN
 		SELECT @TCMOperacionesATM = EC.CantidadOperacionesATM
 			   , @TCMOperacionesVentana = EC.CantidadOperacionesVentana
 			   , @TCMQDePagos = EC.CantidadDePagos
@@ -266,12 +737,33 @@ Cierres de estados de cuenta listo.
 		FROM dbo.EstadoDeCuenta EC 
 		WHERE EC.IdTCM = @IdTCM
 		AND (@InFechaHoy >= EC.FechaInicio AND @InFechaHoy <= EC.FechaFin);
+		END;
+	
 
 		--Ahora los datos para la posible TCA Estado de Cuenta
 
 
 		IF( @IdTCA IS NOT NULL)
 		BEGIN 
+			
+			--Nuevamente hay que ver si es dia de cierre
+
+			IF( @InFechaHoy = @PosibleFin)
+			BEGIN 
+				SELECT @TCAOperacionesATM = EA.CantidadOperacionesATM
+				   , @TCAOperacionesVentana = EA.CantidadOperacionesVentana
+				   , @TCASumaDeCompras = EA.SumaDeCompras
+				   , @TCAQDeCompras = EA.CantidadDeCompras
+				   , @TCASumaDeRetiros = EA.SumaDeRetiros
+				   , @TCAQDeRetiros = EA.CantidadDeRetiros
+				   , @TCASumaDeDebitos = EA.SumaDeDebitos
+				   , @TCASumaDeCreditos = EA.SumaDeCreditos
+			FROM @EstadosDeCuentaTCA EA
+			WHERE EA.IdTCA = @IdTCA
+			END
+
+			ELSE
+			BEGIN			
 			SELECT @TCAOperacionesATM = EA.CantidadOperacionesATM
 				   , @TCAOperacionesVentana = EA.CantidadOperacionesVentana
 				   , @TCASumaDeCompras = EA.SumaDeCompras
@@ -283,7 +775,15 @@ Cierres de estados de cuenta listo.
 			FROM dbo.EstadoDeCuentaAdicional EA
 			WHERE EA.IdTCA = @IdTCA
 			AND (@InFechaHoy >= EA.FechaInicio AND @InFechaHoy <= EA.FechaFin);
+			END;
+
 		END; 
+
+
+
+--################################################################################################################
+--Ya que sacamos los datos del estado de cuenta y tarjetas sigamos con asignaciones de variables
+
 
 		--Saquemos las fechas de la TF
 		SELECT @FechaCreacionTF = TF.FechaCreacion
@@ -296,6 +796,27 @@ Cierres de estados de cuenta listo.
 
 		--ahora saquemos los movimientos que vamos a procesar 	
 
+
+
+
+
+--#################################################################################
+--Ahora insertemos en la tabla variable los movimientos correspondientes a la fecha
+
+--tenemos que revisar que fecha es, porque depende hay que cambiar el id del estado de cuenta
+		
+		DECLARE @IdEstadoDeCuenta INT
+
+
+		SELECT @IdEstadoDeCuenta = EC.Id
+		FROM dbo.EstadoDeCuenta EC
+		WHERE (EC.IdTCM = @IdTCM) 
+		AND (@InFechaHoy >= EC.FechaInicio AND @InFechaHoy <= EC.FechaFin)
+
+		IF (@FechaDeCierre = @PosibleFin)
+		BEGIN 
+			SET @IdEstadoDeCuenta = 1;
+		END; 
 		INSERT INTO @MovimientosTCM 
 		(
 			IdTipoDeMovimiento 
@@ -307,7 +828,7 @@ Cierres de estados de cuenta listo.
 			, IdTarjetaCreditoMaestra 
 		)
 		SELECT TV.Id
-			   , EC.Id
+			   , @IdEstadoDeCuenta
 			   , MV.FechaMovimiento
 			   , MV.Monto
 			   , MV.Descripcion 
@@ -315,8 +836,6 @@ Cierres de estados de cuenta listo.
 			   , @IdTCM
 		FROM @InMovsDiarios MV 
 		INNER JOIN [dbo].[TiposDeMovimiento] TV ON TV.Nombre = MV.Nombre 
-		INNER JOIN [dbo].[EstadoDeCuenta] EC ON (EC.IdTCM = @IdTCM) 
-												AND (@InFechaHoy >= EC.FechaInicio AND @InFechaHoy <= EC.FechaFin)
 		WHERE MV.TarjetaFisica = @InNumeroTarjeta; 
 
 --###############################################################################################################################	
@@ -570,8 +1089,7 @@ Cierres de estados de cuenta listo.
 		(SELECT TM.Id
 		FROM dbo.TiposDeMovimiento TM
 		WHERE TM.Nombre = 'Renovacion de TF')
-		, (SELECT TOP 1 TM.IdEstadoDeCuenta
-		  FROM @MovimientosTCM TM)
+		, @IdEstadoDeCuenta
 		, @InFechaHoy
 		, @MontoRenovacion
 		, 'Renovacion por vencimiento de TF'
@@ -662,8 +1180,7 @@ Cierres de estados de cuenta listo.
 		(SELECT TM.Id
 		FROM dbo.TiposDeMovimiento TM
 		WHERE TM.Nombre = @NombreRecuperacion)
-		, (SELECT TOP 1 TM.IdEstadoDeCuenta
-		  FROM @MovimientosTCM TM)
+		, @IdEstadoDeCuenta
 		, @InFechaHoy
 		, @MontoRenovacion
 		, @NombreRecuperacion
@@ -684,6 +1201,7 @@ Cierres de estados de cuenta listo.
 			, @IdTasaInteresCorriente INT;
 
 	
+
 	IF(@SaldoActual > 0)
 	BEGIN 
 		
@@ -714,8 +1232,7 @@ Cierres de estados de cuenta listo.
 			(SELECT TM.Id
 			FROM dbo.TiposDeMovimiento TM 
 			WHERE TM.Nombre = 'Intereses Corrientes sobre Saldo')
-			, (SELECT TOP 1 TM.IdEstadoDeCuenta
-			  FROM @MovimientosTCM TM)
+			, @IdEstadoDeCuenta
 			, @InFechaHoy
 			, @MontoInteresCorrientes 
 			, @IdTCM
@@ -732,7 +1249,8 @@ Cierres de estados de cuenta listo.
 			, @IdTasaInteresMoratorio INT;
 
 	
-	IF(@InFechaHoy > @FechaPagoMinimo AND @PagoAcumuladosDelPeriodo < @PagoMinimoMesAnterior)
+	IF(@InFechaHoy > @FechaPagoMinimo AND @PagoAcumuladosDelPeriodo < @PagoMinimoMesAnterior
+	   AND DATEPART(DAY, @InFechaHoy) <> 7)
 	BEGIN 
 		
 		SELECT @IdTasaInteresMoratorio = RN.Id
@@ -763,8 +1281,7 @@ Cierres de estados de cuenta listo.
 			(SELECT TM.Id
 			FROM dbo.TiposDeMovimiento TM 
 			WHERE TM.Nombre = 'Intereses Moratorios Pago no Realizado')
-			, (SELECT TOP 1 TM.IdEstadoDeCuenta
-			  FROM @MovimientosTCM TM)
+			, @IdEstadoDeCuenta
 			, @InFechaHoy
 			, @MontoInteresCorrientes 
 			, @IdTCM
@@ -774,11 +1291,14 @@ Cierres de estados de cuenta listo.
 	
 --##############################################################################################################################
 
-
-
+	SELECT @InFechaHoy as FECHA;
 	SELECT V.Nombre, * FROM @MovimientosTCM M
 	INNER JOIN dbo.TiposDeMovimiento V ON M.IdTipoDeMovimiento = V.Id
 	SELECT @PagoAcumuladosDelPeriodo as pagos; 
+
+		SELECT * FROM @NuevoEstadoCuenta AS EC;
+		SELECT * FROM @EstadosDeCuentaTCA AS TCA;
+		SELECT * FROM @MovimientoCierreCuenta AS MOV;
 
 	 SELECT @TCMOperacionesATM as TCMatm; 
 	 SELECT @TCMOperacionesVentana as TCMVentana;

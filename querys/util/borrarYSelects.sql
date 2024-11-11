@@ -83,3 +83,4 @@ DBCC CHECKIDENT ('TiposDeMovimientoCorrientes', RESEED, 0);
 DBCC CHECKIDENT ('TiposDeMovimientoMoratorios', RESEED, 0);
 DBCC CHECKIDENT ('TipoTarjetaCreditoMaestra', RESEED, 0);
 DBCC CHECKIDENT ('Usuarios', RESEED, 0);
+

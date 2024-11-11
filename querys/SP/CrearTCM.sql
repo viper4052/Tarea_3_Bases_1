@@ -47,6 +47,7 @@ BEGIN
 		FROM dbo.TipoTarjetaCreditoMaestra T
 		WHERE T.Nombre = @InTipoTCM
 
+
 		--preprocesamos el tipo id del TH
 		SELECT @IdTarjetaHabiente = T.Id
 		FROM dbo.TarjetaHabiente T
@@ -57,8 +58,10 @@ BEGIN
 
 		SELECT @IdReglaDeNegocio = R.Id 
 		FROM dbo.ReglasDeNegocio R
-		WHERE R.Nombre = 'Cantidad de dias para pago saldo'
+		WHERE R.Nombre = 'Cantidad de dias para pago saldo de contado'
 		AND R.IdTipoDeTCM = @IdTipoTCM; 
+
+
 
 		SET @QDias = (SELECT R.Valor
 					  FROM dbo.RNQDias R
@@ -68,7 +71,7 @@ BEGIN
 		SET @FechaDeCierre = dbo.FechaDeCierre(@InFecha);
 		SET @FechaPagoMinimo = DATEADD(DAY, @QDias, @FechaDeCierre);
 
-		
+	
 
         BEGIN TRANSACTION
         INSERT INTO [dbo].[TarjetaCredito]

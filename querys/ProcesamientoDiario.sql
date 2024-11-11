@@ -208,7 +208,8 @@ intereses*/
 
 	
 	SET @loopI = 1; 
-
+	
+	
 	WHILE (@loopI <= (SELECT MAX(ID)
 					 FROM @NuevosTCM))
 	BEGIN 

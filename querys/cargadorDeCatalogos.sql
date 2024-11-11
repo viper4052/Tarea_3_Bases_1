@@ -71,8 +71,8 @@ FROM @XmlTable
 CROSS APPLY 
 (
     SELECT
-        Nombre = z.value('@Nombre', 'VARCHAR(32)')
-		, tipo = z.value('@tipo', 'VARCHAR(32)')
+        Nombre = z.value('@Nombre', 'VARCHAR(64)')
+		, tipo = z.value('@tipo', 'VARCHAR(64)')
     FROM XmlCol.nodes('root/TRN/TRN') AS T(z)
 ) AS result;
 
@@ -85,7 +85,7 @@ DECLARE @ReglasDeNegocio TABLE
 	Id INT IDENTITY(1,1) NOT NULL
 	, NombreRegla VARCHAR(64) NOT NULL
 	, TipoDeTCM VARCHAR(16) NOT NULL
-	, TipoRN VARCHAR(32) NOT NULL
+	, TipoRN VARCHAR(64) NOT NULL
 	, Valor VARCHAR(32) NOT NULL
 )
 
@@ -95,9 +95,9 @@ FROM @XmlTable
 CROSS APPLY 
 (
     SELECT
-        NombreRegla = z.value('@Nombre', 'VARCHAR(32)')
+        NombreRegla = z.value('@Nombre', 'VARCHAR(64)')
 		, TipoDeTCM = z.value('@TTCM', 'VARCHAR(32)')
-		, TipoRN = z.value('@TipoRN', 'VARCHAR(32)')
+		, TipoRN = z.value('@TipoRN', 'VARCHAR(64)')
 		, Valor = z.value('@Valor', 'VARCHAR(32)')
     FROM XmlCol.nodes('root/RN/RN') AS T(z)
 ) AS result;
@@ -121,7 +121,7 @@ CROSS APPLY
 	--Declaramos Variables para el while
 	DECLARE @lo INT
 			, @hi INT
-			, @TipoRN VARCHAR(32)
+			, @TipoRN VARCHAR(64)
 			, @Valor VARCHAR(32);
 
 	SELECT @hi = MAX(Id)
