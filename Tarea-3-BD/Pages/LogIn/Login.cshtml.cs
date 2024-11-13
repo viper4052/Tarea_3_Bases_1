@@ -59,6 +59,7 @@ namespace Tarea_3_BD.Pages.LogIn
             ViewData["ShowLogoutButton"] = false;
             Ip = HttpContext.Connection.RemoteIpAddress?.ToString();
 
+
             DateTime dateNow = DateTime.Now;
 
             String Username = Request.Form["Nombre"];

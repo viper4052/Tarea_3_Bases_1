@@ -8,7 +8,6 @@ namespace Tarea_3_BD.Pages.View.List
 {
     public class VistaTCMModel : PageModel
     {
-        public Usuario user = new Usuario();
         public string errorMessage = "";
         public List<TCMmodel> listaTCM = new List<TCMmodel>();
         public ConnectSQL SQL = new ConnectSQL();
@@ -21,9 +20,10 @@ namespace Tarea_3_BD.Pages.View.List
         {
             ViewData["ShowLogoutButton"] = true;
             Ip = HttpContext.Connection.RemoteIpAddress?.ToString();
-            string user = (string)HttpContext.Session.GetString("Usuario");
+            string user = (string)HttpContext.Session.GetString("Username");
             Console.WriteLine(user);
 
+            Console.WriteLine("Usuario actual: " + username);
 
 
             using (SQL.connection)
@@ -40,13 +40,13 @@ namespace Tarea_3_BD.Pages.View.List
 
         }
 
-        public int ObtieneTipoUsuario() // asigna el tipo de usuario para esta vista
+        public int ObtieneTipoUsuario(string username) // asigna el tipo de usuario para esta vista
         {
 			SQL.Open();
 			SQL.LoadSP("[dbo].[VerificaUsuario]");
             SQL.OutParameter("@OutTipoUsuario", SqlDbType.Int, 0);
 			
-            SQL.InParameter("@InUsername", (string)HttpContext.Session.GetString("Usuario"), SqlDbType.VarChar);
+            SQL.InParameter("@InUsername", username, SqlDbType.VarChar);
 
 			SQL.ExecSP();
 
@@ -57,7 +57,7 @@ namespace Tarea_3_BD.Pages.View.List
 
 		}
 
-        public ActionResult OnPost()
+        public ActionResult OnPost(string username)
         {
             using (SQL.connection)
             {
@@ -73,7 +73,7 @@ namespace Tarea_3_BD.Pages.View.List
                 }
                 else
                 {
-                    HttpContext.Session.SetString("Username", user.Username);
+                    HttpContext.Session.SetString("Username", username);
 
                     return RedirectToPage("/View/List/VistaEstadoDeCuenta");
                 }
@@ -84,11 +84,14 @@ namespace Tarea_3_BD.Pages.View.List
 
         public int ListarTCMs ()
         {
+            string username = (string)HttpContext.Session.GetString("Username");
+            
             SQL.Open();
             SQL.LoadSP("[dbo].[ObtieneTCM]");
             SQL.OutParameter("@OutTipoUsuario", SqlDbType.Int, 0);
 
-            SQL.InParameter("@InUsername", user.Username.ToString(), SqlDbType.VarChar); // el error esta en el segundo parametro
+            Console.WriteLine("Usuario actual: " + username);
+            SQL.InParameter("@InUsername", username, SqlDbType.VarChar); // el error esta en el segundo parametro
 
             
 
