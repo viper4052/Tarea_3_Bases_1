@@ -24,7 +24,10 @@ namespace Tarea_3_BD.Pages.LogIn
 
         public void OnGet()
         {
-
+            ViewData["ShowLogoutButton"] = false;
+            Ip = HttpContext.Connection.RemoteIpAddress?.ToString();
+            string user = (string)HttpContext.Session.GetString("Usuario");
+            Console.WriteLine(user);
         }
 
 

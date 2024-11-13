@@ -44,15 +44,16 @@ namespace Tarea_3_BD.Pages.View.List
         {
 			SQL.Open();
 			SQL.LoadSP("[dbo].[VerificaUsuario]");
-
-			SQL.InParameter("@InUsername", user.Username, SqlDbType.VarChar);
+            SQL.OutParameter("@OutTipoUsuario", SqlDbType.Int, 0);
+			
+            SQL.InParameter("@InUsername", (string)HttpContext.Session.GetString("Usuario"), SqlDbType.VarChar);
 
 			SQL.ExecSP();
-			SQL.Close();
 
-            tipoDeUsuario = (int)SQL.command.Parameters["@TipoDeUsuario"].Value;
+            tipoDeUsuario = (int)SQL.command.Parameters["@OutTipoUsuario"].Value;
+            SQL.Close();
 
-			return 0;
+            return 0;
 
 		}
 
@@ -85,8 +86,11 @@ namespace Tarea_3_BD.Pages.View.List
         {
             SQL.Open();
             SQL.LoadSP("[dbo].[ObtieneTCM]");
+            SQL.OutParameter("@OutTipoUsuario", SqlDbType.Int, 0);
 
-            SQL.OutParameter("@OutResultCode", SqlDbType.Int, 0);
+            SQL.InParameter("@InUsername", user.Username.ToString(), SqlDbType.VarChar); // el error esta en el segundo parametro
+
+            
 
 
             // habiendo ya cargado los posibles parametros entonces podemos llamar al SP

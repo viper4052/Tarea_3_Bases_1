@@ -3,24 +3,24 @@
   "WorkspaceRootPath": "C:\\Users\\viper\\Documents\\GitHub\\Tarea_3_Bases_1\\Tarea-3-BD\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{4F3A95FE-0E32-4DD4-888D-8A391CEDAECD}|Tarea-3-BD.csproj|c:\\users\\viper\\documents\\github\\tarea_3_bases_1\\tarea-3-bd\\pages\\model\\tcmmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{4F3A95FE-0E32-4DD4-888D-8A391CEDAECD}|Tarea-3-BD.csproj|solutionrelative:pages\\model\\tcmmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{4F3A95FE-0E32-4DD4-888D-8A391CEDAECD}|Tarea-3-BD.csproj|c:\\users\\viper\\documents\\github\\tarea_3_bases_1\\tarea-3-bd\\pages\\view\\list\\vistatcm.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{4F3A95FE-0E32-4DD4-888D-8A391CEDAECD}|Tarea-3-BD.csproj|solutionrelative:pages\\view\\list\\vistatcm.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{4F3A95FE-0E32-4DD4-888D-8A391CEDAECD}|Tarea-3-BD.csproj|c:\\users\\viper\\documents\\github\\tarea_3_bases_1\\tarea-3-bd\\pages\\login\\login.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4F3A95FE-0E32-4DD4-888D-8A391CEDAECD}|Tarea-3-BD.csproj|solutionrelative:pages\\login\\login.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{4F3A95FE-0E32-4DD4-888D-8A391CEDAECD}|Tarea-3-BD.csproj|c:\\users\\viper\\documents\\github\\tarea_3_bases_1\\tarea-3-bd\\pages\\view\\list\\vistatcm.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{4F3A95FE-0E32-4DD4-888D-8A391CEDAECD}|Tarea-3-BD.csproj|solutionrelative:pages\\view\\list\\vistatcm.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{4F3A95FE-0E32-4DD4-888D-8A391CEDAECD}|Tarea-3-BD.csproj|c:\\users\\viper\\documents\\github\\tarea_3_bases_1\\tarea-3-bd\\pages\\view\\list\\vistaestadodecuenta.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{4F3A95FE-0E32-4DD4-888D-8A391CEDAECD}|Tarea-3-BD.csproj|solutionrelative:pages\\view\\list\\vistaestadodecuenta.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{4F3A95FE-0E32-4DD4-888D-8A391CEDAECD}|Tarea-3-BD.csproj|c:\\users\\viper\\documents\\github\\tarea_3_bases_1\\tarea-3-bd\\pages\\view\\list\\vistatcm.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{4F3A95FE-0E32-4DD4-888D-8A391CEDAECD}|Tarea-3-BD.csproj|solutionrelative:pages\\view\\list\\vistatcm.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{4F3A95FE-0E32-4DD4-888D-8A391CEDAECD}|Tarea-3-BD.csproj|c:\\users\\viper\\documents\\github\\tarea_3_bases_1\\tarea-3-bd\\pages\\login\\login.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{4F3A95FE-0E32-4DD4-888D-8A391CEDAECD}|Tarea-3-BD.csproj|solutionrelative:pages\\login\\login.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{4F3A95FE-0E32-4DD4-888D-8A391CEDAECD}|Tarea-3-BD.csproj|c:\\users\\viper\\documents\\github\\tarea_3_bases_1\\tarea-3-bd\\pages\\model\\tcmmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4F3A95FE-0E32-4DD4-888D-8A391CEDAECD}|Tarea-3-BD.csproj|solutionrelative:pages\\model\\tcmmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4F3A95FE-0E32-4DD4-888D-8A391CEDAECD}|Tarea-3-BD.csproj|c:\\users\\viper\\documents\\github\\tarea_3_bases_1\\tarea-3-bd\\pages\\view\\list\\vistaestadodecuenta.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4F3A95FE-0E32-4DD4-888D-8A391CEDAECD}|Tarea-3-BD.csproj|solutionrelative:pages\\view\\list\\vistaestadodecuenta.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{4F3A95FE-0E32-4DD4-888D-8A391CEDAECD}|Tarea-3-BD.csproj|c:\\users\\viper\\documents\\github\\tarea_3_bases_1\\tarea-3-bd\\pages\\view\\list\\vistaestadodecuenta.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
@@ -34,11 +34,11 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 3,
               "Title": "TCMmodel.cs",
               "DocumentMoniker": "C:\\Users\\viper\\Documents\\GitHub\\Tarea_3_Bases_1\\Tarea-3-BD\\Pages\\Model\\TCMmodel.cs",
               "RelativeDocumentMoniker": "Pages\\Model\\TCMmodel.cs",
@@ -51,20 +51,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 1,
               "Title": "VistaTCM.cshtml.cs",
               "DocumentMoniker": "C:\\Users\\viper\\Documents\\GitHub\\Tarea_3_Bases_1\\Tarea-3-BD\\Pages\\View\\List\\VistaTCM.cshtml.cs",
               "RelativeDocumentMoniker": "Pages\\View\\List\\VistaTCM.cshtml.cs",
               "ToolTip": "C:\\Users\\viper\\Documents\\GitHub\\Tarea_3_Bases_1\\Tarea-3-BD\\Pages\\View\\List\\VistaTCM.cshtml.cs",
               "RelativeToolTip": "Pages\\View\\List\\VistaTCM.cshtml.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAAgAAAAAAAAAA==",
+              "ViewState": "AgIAAAgAAAAAAAAAAAAxwBgAAAAkAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-11-13T17:38:58.905Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "VistaTCM.cshtml",
               "DocumentMoniker": "C:\\Users\\viper\\Documents\\GitHub\\Tarea_3_Bases_1\\Tarea-3-BD\\Pages\\View\\List\\VistaTCM.cshtml",
               "RelativeDocumentMoniker": "Pages\\View\\List\\VistaTCM.cshtml",
@@ -77,13 +77,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 0,
               "Title": "Login.cshtml.cs",
               "DocumentMoniker": "C:\\Users\\viper\\Documents\\GitHub\\Tarea_3_Bases_1\\Tarea-3-BD\\Pages\\LogIn\\Login.cshtml.cs",
               "RelativeDocumentMoniker": "Pages\\LogIn\\Login.cshtml.cs",
               "ToolTip": "C:\\Users\\viper\\Documents\\GitHub\\Tarea_3_Bases_1\\Tarea-3-BD\\Pages\\LogIn\\Login.cshtml.cs",
               "RelativeToolTip": "Pages\\LogIn\\Login.cshtml.cs",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAAABIAAAAsAAAAAAAAAA==",
+              "ViewState": "AgIAAA4AAAAAAAAAAAAxwBIAAAAsAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-11-13T15:29:21.579Z",
               "EditorCaption": ""
@@ -98,12 +98,11 @@
               "RelativeToolTip": "Pages\\View\\List\\VistaEstadoDeCuenta.cshtml",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAaAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-11-13T17:27:32.203Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-11-13T17:27:32.203Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "VistaEstadoDeCuenta.cshtml.cs",
               "DocumentMoniker": "C:\\Users\\viper\\Documents\\GitHub\\Tarea_3_Bases_1\\Tarea-3-BD\\Pages\\View\\List\\VistaEstadoDeCuenta.cshtml.cs",
               "RelativeDocumentMoniker": "Pages\\View\\List\\VistaEstadoDeCuenta.cshtml.cs",
@@ -111,8 +110,7 @@
               "RelativeToolTip": "Pages\\View\\List\\VistaEstadoDeCuenta.cshtml.cs",
               "ViewState": "AgIAAAMAAAAAAAAAAAAAABMAAAAkAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-13T17:31:17.308Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-11-13T17:31:17.308Z"
             }
           ]
         }
