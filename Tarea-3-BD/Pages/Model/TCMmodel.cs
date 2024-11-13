@@ -10,11 +10,15 @@ namespace Tarea_3_BD.Pages.Model
 
 		
 		[DisplayName("IdTipoTCM")]
-		[Required]
+		//[Required]
 		public int IdTipoTCM { get; set; }
 
-		
-		[DisplayName("LimiteCredito")]
+        [DisplayName("IdTipoTCA")]
+        //[Required]
+        public int IdTipoTCA { get; set; }
+
+
+        [DisplayName("LimiteCredito")]
 		[Required]
 		public int LimiteCredito { get; set; }
 

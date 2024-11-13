@@ -27,7 +27,7 @@ namespace Tarea_3_BD.Pages.LogIn
 
         }
 
-        
+
         public int BuscarUsuario(String IP, DateTime date) //devuelve el tipo de error (Si hubo)
         {
             SQL.Open();
@@ -49,7 +49,7 @@ namespace Tarea_3_BD.Pages.LogIn
             return (int)SQL.command.Parameters["@OutResultCode"].Value;
         }
 
-
+        
 
         public ActionResult OnPost()
         {
