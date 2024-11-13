@@ -3,7 +3,7 @@
 @{
 }
 
-<h2>Tarjetas de Usuario</h2>
+<h2>Tarjetas de Usuario - Admin</h2>
 
 <table class="table">
     <thead>
@@ -21,64 +21,40 @@
         </tr>
     </thead>
     <tbody>
-        @if (Model.tipoDeUsuario == 1) // si es admin
+        @foreach (var tarjeta in Model.listaTCM)
         {
-            @foreach (var tarjeta in Model.listaTCM)
-            {
-                <tr>
-                    @* fecha estado de cuenta *@
-                    <th>@tarjeta.SaldoPagoMinimo</th>
-                    <th>@tarjeta.SaldoActual</th>
-                    <th>@tarjeta.SaldoInteresesCorrientes</th>
-                    <th>@tarjeta.SaldoInteresMoratorios</th>
-                    @*
-                    cantidad operaciones ATM
-                    cantidad operaciones ventanilla
-                    cantidad de compras
-                    cantidad de retiros
-                    suma de los retiros
-                    *@
-                </tr>
-            }
-        }
-        @if (Model.tipoDeUsuario == 2) // si es regular
-        {
-            @foreach (var tarjeta in Model.listaTCM)
-            {
-
-                <tr>
-                    @* fecha estado de cuenta *@
-                    <th>@tarjeta.SaldoPagoMinimo</th>
-                    <th>@tarjeta.SaldoActual</th>
-                    <th>@tarjeta.SaldoInteresesCorrientes</th>
-                    <th>@tarjeta.SaldoInteresMoratorios</th>
-                    @* 
-                     cantidad operaciones ATM
-                     cantidad operaciones ventanilla
-                     cantidad de compras
-                     suma de las compras
-                     cantidad de retiros
-                     suma de los retiros
-                    *@
-
-
-                  
-                </tr>
-            }
+            <tr>
+                @* fecha estado de cuenta *@
+                <th>@tarjeta.SaldoPagoMinimo</th>
+                <th>@tarjeta.SaldoActual</th>
+                <th>@tarjeta.SaldoInteresesCorrientes</th>
+                <th>@tarjeta.SaldoInteresMoratorios</th>
+                @*
+                cantidad operaciones ATM
+                cantidad operaciones ventanilla
+                cantidad de compras
+                cantidad de retiros
+                suma de los retiros
+                *@
+                    
+            </tr>
         }
     </tbody>
-	<tbody>
-		@foreach (var item in Model.listaTCM)
-		{
-			<tr>
-				<td>
-					<form method="post" asp-page-handler="ConsultarTarjeta">
-                        <input type="hidden" name="nombre" value="@item.IdTipoTCM" /> <!--Cambiar al valor de id de la tarjeta especifica para consultar su info-->
-						<button type="submit" class="btn btn-primary">Consultar</button>
-					</form>
-				</td>
+	@*
+    <tbody>
+	@foreach (var item in Model.listaTCM)
+	{
+	<tr>
+		<td>
+
+			<form method="post" asp-page-handler="ConsultarTarjeta">
+                <input type="hidden" name="nombre" value="@item.IdTipoTCM" /> <!--Cambiar al valor de id de la tarjeta especifica para consultar su info-->
+				<button type="submit" class="btn btn-primary">Consultar</button>
+			</form>
+		</td>
 				
-			</tr>
-		}
+	</tr>
+	}
 	</tbody>
+    *@
 </table>

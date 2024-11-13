@@ -20,6 +20,7 @@ namespace Tarea_3_BD.Pages.LogIn
         public String errorMessage = "";
         public ConnectSQL SQL = new ConnectSQL();
         public String Ip;
+        public int tipoDeUsuarioRedireccion;
 
 
         public void OnGet()
@@ -42,12 +43,13 @@ namespace Tarea_3_BD.Pages.LogIn
             SQL.InParameter("@InPostTime", date, SqlDbType.DateTime);
 
             SQL.OutParameter("@OutResultCode", SqlDbType.Int, 0);
+            SQL.OutParameter("@OutTipoUsuario", SqlDbType.Int, 1);
 
             SQL.ExecSP();
             SQL.Close();
 
             //intentos = (int)SQL.command.Parameters["@OutIntentos"].Value;
-
+            tipoDeUsuarioRedireccion = (int)SQL.command.Parameters["@OutTipoUsuario"].Value; // asigno el tipo de usuario
 
             return (int)SQL.command.Parameters["@OutResultCode"].Value;
         }
@@ -109,6 +111,15 @@ namespace Tarea_3_BD.Pages.LogIn
                 else
                 {
                     HttpContext.Session.SetString("Username", user.Username);
+
+                    if (tipoDeUsuarioRedireccion == 1)
+                    {
+                        return RedirectToPage("/View/List/VistaTCM");
+                    }
+                    else if (tipoDeUsuarioRedireccion == 2)
+                    {
+                        return RedirectToPage("/View/List/VistaUsuario");
+                    }
 
                     return RedirectToPage("/View/List/VistaTCM");
                 }

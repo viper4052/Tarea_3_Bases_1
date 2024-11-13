@@ -1,0 +1,41 @@
+﻿@page
+@model Tarea_3_BD.Pages.View.List.VistaUsuarioModel
+@{
+}
+
+<h2>Tarjetas de Usuario - Usuario</h2>
+<table class="table">
+    <thead>
+        <tr>
+            @* <th>Fecha estado de cuenta</th> *@
+            <th>IdTarjetaHabiente</th>
+            <th>IdTipoTCM</th>
+            <th>Limite Crédito</th>
+            <th>Saldo Actual</th>
+            <th>Suma de movimientos</th>
+            <th>Saldo Intereses Corrientes</th>
+            <th>Saldo Intereses Moratorios</th>
+            <th>Saldo Pago Minimo</th>
+            <th>Pagos acumulados del periodo</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var tarjeta in Model.listaTCM)
+    {
+        <tr>
+        @* fecha estado de cuenta *@
+        <th>@tarjeta.SaldoPagoMinimo</th>
+        <th>@tarjeta.SaldoActual</th>
+        <th>@tarjeta.SaldoInteresesCorrientes</th>
+        <th>@tarjeta.SaldoInteresMoratorios</th>
+        @* 
+        cantidad operaciones ATM
+        cantidad operaciones ventanilla
+        cantidad de compras
+        suma de las compras
+        cantidad de retiros
+        suma de los retiros
+        *@
+        </tr>
+    }
+    </tbody>

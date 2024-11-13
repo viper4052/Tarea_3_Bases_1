@@ -95,7 +95,7 @@ namespace Tarea_3_BD.Pages.Model
 
             Close();
 
-            return (String)command.Parameters["@OutDescripcion"].Value;
+            return "Error"; //(String)command.Parameters["@OutDescripcion"].Value;
         }
 
 		

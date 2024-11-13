@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Data.SqlClient;
 using System.Data;
 using Tarea_3_BD.Pages.Model;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Tarea_3_BD.Pages.View.List
 {
@@ -12,25 +13,24 @@ namespace Tarea_3_BD.Pages.View.List
         public List<TCMmodel> listaTCM = new List<TCMmodel>();
         public ConnectSQL SQL = new ConnectSQL();
         public string Ip;
-        public int tipoDeUsuario = 0;
 
         public string SuccessMessage { get; set; }
 
-        public void OnGet(string username)
+        public void OnGet()
         {
+
             ViewData["ShowLogoutButton"] = true;
             Ip = HttpContext.Connection.RemoteIpAddress?.ToString();
             string user = (string)HttpContext.Session.GetString("Username");
             Console.WriteLine(user);
 
-            Console.WriteLine("Usuario actual: " + username);
-
+            Console.WriteLine("Usuario actual: " + user);
 
             using (SQL.connection)
             {
 
-                int resultCode = ListarTCMs(); 
-
+                int resultCode = ListarTCMs();
+             
                 if (resultCode != 0)
                 {
                     errorMessage = SQL.BuscarError(resultCode);
@@ -40,22 +40,7 @@ namespace Tarea_3_BD.Pages.View.List
 
         }
 
-        public int ObtieneTipoUsuario(string username) // asigna el tipo de usuario para esta vista
-        {
-			SQL.Open();
-			SQL.LoadSP("[dbo].[VerificaUsuario]");
-            SQL.OutParameter("@OutTipoUsuario", SqlDbType.Int, 0);
-			
-            SQL.InParameter("@InUsername", username, SqlDbType.VarChar);
-
-			SQL.ExecSP();
-
-            tipoDeUsuario = (int)SQL.command.Parameters["@OutTipoUsuario"].Value;
-            SQL.Close();
-
-            return 0;
-
-		}
+        
 
         public ActionResult OnPost(string username)
         {
@@ -82,6 +67,8 @@ namespace Tarea_3_BD.Pages.View.List
         }
 
 
+        
+
         public int ListarTCMs ()
         {
             string username = (string)HttpContext.Session.GetString("Username");
@@ -89,6 +76,9 @@ namespace Tarea_3_BD.Pages.View.List
             SQL.Open();
             SQL.LoadSP("[dbo].[ObtieneTCM]");
             SQL.OutParameter("@OutTipoUsuario", SqlDbType.Int, 0);
+
+            
+
 
             Console.WriteLine("Usuario actual: " + username);
             SQL.InParameter("@InUsername", username, SqlDbType.VarChar); // el error esta en el segundo parametro
@@ -104,6 +94,7 @@ namespace Tarea_3_BD.Pages.View.List
                 if (dr.Read()) // primero verificamos si el resultcode es positivo
                 {
                     resultCode = dr.GetInt32(0);
+
 
                     if (resultCode == 0)
                     {
