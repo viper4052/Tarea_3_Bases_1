@@ -1,0 +1,26 @@
+﻿@page
+@model Tarea_3_BD.Pages.View.List.VistaTCMModel
+@{
+}
+
+<h2>Tarjetas de Usuario Maestras</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>IdTarjetaHabiente</th>
+            <th>IdTipoTCM</th>
+            <th>Age</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var tarjeta in Model.listaTCM)
+        {
+            <tr>
+                <td>@tarjeta.IdTarjetaHabiente</td>
+                <td>@tarjeta.IdTipoTCM</td>
+                <td>@tarjeta.LimiteCredito</td>
+            </tr>
+        }
+    </tbody>
+</table>
