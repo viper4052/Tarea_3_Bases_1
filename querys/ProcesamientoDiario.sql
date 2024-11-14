@@ -107,7 +107,26 @@ intereses*/
 
 	--Es la tabla de parametros 
 	DECLARE @MovsDiarios MovimientosDiarios; 
+
+
+
+	DECLARE @TarjetasFisicasActivas TABLE
+	(
+		Id INT NOT NULL
+		, IdTarjeta INT NOT NULL
+		, Numero BIGINT NOT NULL
+		, EsValida BIT NOT NULL
+	); 
+
 	
+
+	DECLARE @Fecha DATE 
+
+
+	--esta fecha es la diaria que se aumentara dia a dia 
+	SELECT @Fecha = F.FechaOperacion 
+	FROM @FechasDeOperacion F
+	WHERE 1 = F.id; 
 
 -- Dentro de este while se manipulara cada una de las fechas:  
 --############################################################################################################
@@ -118,6 +137,16 @@ intereses*/
 	SELECT @FechaHoy = F.FechaOperacion 
 	FROM @FechasDeOperacion F
 	WHERE @lo = F.id; 
+
+
+
+	/*Primero preguntemos si para la fecha se registraron operaciones
+	creaciones de tarjetas, movimientos, etc. Si no fuera asi entonces
+	se salta todo hasta la aplicacion del ELSTOREPROCEDURE, el cual se encargara
+	de aplicar movimientos por intereses o bien cerrar EC*/
+
+	IF(@Fecha = @FechaHoy)
+	BEGIN 
 
 	----Primero hagamos la creacion de nuevos tarjeta habientes
 	--############################################################################################################
@@ -350,7 +379,8 @@ intereses*/
 	--Ya que procesamos todas las tarjetas ahora toca hacer el procesamiento de los movimientos
 	--lo que vamos a hacer es insertar en una tabla de parametro que lleva los movimientos diarios 
 
-/*
+	--/*
+
 	INSERT INTO @MovsDiarios
     SELECT 
 		ROW_NUMBER() OVER (ORDER BY (SELECT NULL)) AS Id
@@ -375,61 +405,88 @@ intereses*/
     WHERE F.Id = @lo;
 
 
+	--##################################################
+	/*
+	El IF principal termina aqui ya que para lo siguiente lo que se hara
+	es aplicar los movs por interes y cierres de cuenta 
+	*/
+
+	SET @lo += 1; --aumentamos el indice solo en este caso, para el resto de dias no 
+
+	END; 
+
 	-- Ya que tenemos lista nuestra tabla parametro/variable
 	-- Toca hacer un while en el que se procesen los movimientos de cada TF 
 
-	DECLARE @MovimientosAProcesar INT --se encarga de ver en cuento hay que decrementa --el indice del while
-			, @Nombre VARCHAR(64)
+	DECLARE @Nombre VARCHAR(64)
 			, @FechaMov DATE
 			, @Monto MONEY
 			, @Descripcion VARCHAR(256)
-			, @Referencia VARCHAR(32);
+			, @Referencia VARCHAR(32)
+			, @HiWhile INT;
 									   
-	SET @ResultCode = 0;
+	/* ya que este SP diario se aplica a todas la tarjetas fisicas vamos a añadirlas 
+	a una tabla variable que aplicara creditos, debitos movimientos y cierres de estado de cuenta
+	a todas las cuentas */
+
+
+	INSERT INTO @TarjetasFisicasActivas
+	(
+		Id
+		, IdTarjeta
+		, Numero
+		, EsValida 
+	)
+	SELECT ROW_NUMBER() OVER (ORDER BY (SELECT NULL)) AS Id
+		   , TF.IdTarjeta 
+		   , TF.Numero 
+		   , TF.EsValida 
+	FROM dbo.TarjetaFisica TF
+	WHERE TF.EsValida = 1;
+	
+	SELECT @HiWhile = MAX(TF.id) 
+	FROM @TarjetasFisicasActivas TF;
+
 	SET @loopI = 1; 
 
-	WHILE (@loopI <= (SELECT MAX(ID)
-					 FROM @NuevosTCA))
+	WHILE (@loopI <= @HiWhile)
 	BEGIN 
 		
 		SET @ResultCode = 0
 
-		--Seleccionamos La primera Tarjeta Fisica 
-		SELECT TOP 1 @NumeroTarjeta = M.TarjetaFisica
-		FROM @MovsDiarios M;
+		--Seleccionamos Tarjeta Fisica 
+		SELECT @NumeroTarjeta = A.Numero
+		FROM @TarjetasFisicasActivas A
+		WHERE A.Id = @loopI 
 
 		
-		SELECT @MovimientosAProcesar = COUNT(TarjetaFisica)
-		FROM @MovsDiarios M
-		WHERE M.TarjetaFisica = @NumeroTarjeta;
-
 		EXEC ELSTOREPROCEDURE @ResultCode --este es el SP que se encarga de todo lo referente a la TCM
-					   , @MovsDiarios  
-					   , @NumeroTarjeta 
-					   , @FechaHoy
-
-		IF(@ResultCode = 0) 
-		BEGIN 
-
-			SET @loopI -= (@MovimientosAProcesar-1); 
-			SET @MovimientosAProcesar = 0; 
-
-			DELETE FROM @MovsDiarios
-			WHERE [TarjetaFisica] = @NumeroTarjeta; 
-
-		END; 
+						   , @MovsDiarios  
+						   , @NumeroTarjeta 
+						   , @Fecha 
+		
+		
 		SET @loopI += 1;
 	END;
 
-	SELECT * FROM @MovsDiarios; */
+
+	--*/
+
+	
 
 	DELETE FROM @TarjetaHabientes;
+	DELETE FROM @TarjetasFisicasActivas; 
 	DELETE FROM @NuevosTCM; 
 	DELETE FROM @NuevosTCA;
 	DELETE FROM @NuevosTF;
 	DELETE FROM @MovsDiarios;
 
-	SET @lo += 1;
+
+
+	SET @Fecha = DATEADD(DAY, 1, @Fecha) --por cada iteracion aumenta un dia 
+
+	
+
 	END;
 
 
