@@ -38,8 +38,16 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/viper/Documents/GitHub/Tarea_3_Bases_1/Tarea-3-BD/Pages/View/List/VistaAdmin.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVmlld1xMaXN0XFZpc3RhQWRtaW4uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/viper/Documents/GitHub/Tarea_3_Bases_1/Tarea-3-BD/Pages/View/List/VistaEstadoDeCuenta.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVmlld1xMaXN0XFZpc3RhRXN0YWRvRGVDdWVudGEuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/viper/Documents/GitHub/Tarea_3_Bases_1/Tarea-3-BD/Pages/View/List/VistaTCA.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVmlld1xMaXN0XFZpc3RhVENBLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/viper/Documents/GitHub/Tarea_3_Bases_1/Tarea-3-BD/Pages/View/List/VistaTCM.cshtml]
@@ -48,10 +56,6 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/viper/Documents/GitHub/Tarea_3_Bases_1/Tarea-3-BD/Pages/View/List/VistaTF.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVmlld1xMaXN0XFZpc3RhVEYuY3NodG1s
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/viper/Documents/GitHub/Tarea_3_Bases_1/Tarea-3-BD/Pages/View/List/VistaUsuario.cshtml]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVmlld1xMaXN0XFZpc3RhVXN1YXJpby5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/viper/Documents/GitHub/Tarea_3_Bases_1/Tarea-3-BD/Pages/_ViewImports.cshtml]

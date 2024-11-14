@@ -3,12 +3,20 @@
   "WorkspaceRootPath": "C:\\Users\\viper\\Documents\\GitHub\\Tarea_3_Bases_1\\Tarea-3-BD\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{4F3A95FE-0E32-4DD4-888D-8A391CEDAECD}|Tarea-3-BD.csproj|c:\\users\\viper\\documents\\github\\tarea_3_bases_1\\tarea-3-bd\\pages\\view\\list\\vistaestadodecuenta.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{4F3A95FE-0E32-4DD4-888D-8A391CEDAECD}|Tarea-3-BD.csproj|solutionrelative:pages\\view\\list\\vistaestadodecuenta.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{4F3A95FE-0E32-4DD4-888D-8A391CEDAECD}|Tarea-3-BD.csproj|c:\\users\\viper\\documents\\github\\tarea_3_bases_1\\tarea-3-bd\\pages\\view\\list\\vistatf.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4F3A95FE-0E32-4DD4-888D-8A391CEDAECD}|Tarea-3-BD.csproj|solutionrelative:pages\\view\\list\\vistatf.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{4F3A95FE-0E32-4DD4-888D-8A391CEDAECD}|Tarea-3-BD.csproj|c:\\users\\viper\\documents\\github\\tarea_3_bases_1\\tarea-3-bd\\pages\\view\\list\\vistatcm.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{4F3A95FE-0E32-4DD4-888D-8A391CEDAECD}|Tarea-3-BD.csproj|solutionrelative:pages\\view\\list\\vistatcm.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{4F3A95FE-0E32-4DD4-888D-8A391CEDAECD}|Tarea-3-BD.csproj|c:\\users\\viper\\documents\\github\\tarea_3_bases_1\\tarea-3-bd\\pages\\view\\list\\vistaadmin.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{4F3A95FE-0E32-4DD4-888D-8A391CEDAECD}|Tarea-3-BD.csproj|solutionrelative:pages\\view\\list\\vistaadmin.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4F3A95FE-0E32-4DD4-888D-8A391CEDAECD}|Tarea-3-BD.csproj|c:\\users\\viper\\documents\\github\\tarea_3_bases_1\\tarea-3-bd\\pages\\view\\list\\vistaadmin.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4F3A95FE-0E32-4DD4-888D-8A391CEDAECD}|Tarea-3-BD.csproj|solutionrelative:pages\\view\\list\\vistaadmin.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4F3A95FE-0E32-4DD4-888D-8A391CEDAECD}|Tarea-3-BD.csproj|c:\\users\\viper\\documents\\github\\tarea_3_bases_1\\tarea-3-bd\\pages\\view\\list\\vistatf.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{4F3A95FE-0E32-4DD4-888D-8A391CEDAECD}|Tarea-3-BD.csproj|solutionrelative:pages\\view\\list\\vistatf.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     }
   ],
   "DocumentGroupContainers": [
@@ -18,19 +26,32 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "VistaTCM.cshtml.cs",
-              "DocumentMoniker": "C:\\Users\\viper\\Documents\\GitHub\\Tarea_3_Bases_1\\Tarea-3-BD\\Pages\\View\\List\\VistaTCM.cshtml.cs",
-              "RelativeDocumentMoniker": "Pages\\View\\List\\VistaTCM.cshtml.cs",
-              "ToolTip": "C:\\Users\\viper\\Documents\\GitHub\\Tarea_3_Bases_1\\Tarea-3-BD\\Pages\\View\\List\\VistaTCM.cshtml.cs",
-              "RelativeToolTip": "Pages\\View\\List\\VistaTCM.cshtml.cs",
-              "ViewState": "AgIAAGMAAAAAAAAAAAAkwCUAAAANAAAAAAAAAA==",
+              "DocumentIndex": 3,
+              "Title": "VistaTF.cshtml",
+              "DocumentMoniker": "C:\\Users\\viper\\Documents\\GitHub\\Tarea_3_Bases_1\\Tarea-3-BD\\Pages\\View\\List\\VistaTF.cshtml",
+              "RelativeDocumentMoniker": "Pages\\View\\List\\VistaTF.cshtml",
+              "ToolTip": "C:\\Users\\viper\\Documents\\GitHub\\Tarea_3_Bases_1\\Tarea-3-BD\\Pages\\View\\List\\VistaTF.cshtml",
+              "RelativeToolTip": "Pages\\View\\List\\VistaTF.cshtml",
+              "ViewState": "AgIAAA8AAAAAAAAAAAAAAC8AAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-11-14T20:38:13.595Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "VistaTF.cshtml.cs",
+              "DocumentMoniker": "C:\\Users\\viper\\Documents\\GitHub\\Tarea_3_Bases_1\\Tarea-3-BD\\Pages\\View\\List\\VistaTF.cshtml.cs",
+              "RelativeDocumentMoniker": "Pages\\View\\List\\VistaTF.cshtml.cs",
+              "ToolTip": "C:\\Users\\viper\\Documents\\GitHub\\Tarea_3_Bases_1\\Tarea-3-BD\\Pages\\View\\List\\VistaTF.cshtml.cs",
+              "RelativeToolTip": "Pages\\View\\List\\VistaTF.cshtml.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAApAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-14T02:13:58.657Z",
+              "WhenOpened": "2024-11-14T20:38:19.362Z",
               "EditorCaption": ""
             }
           ]
@@ -41,15 +62,28 @@
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "VistaEstadoDeCuenta.cshtml.cs",
-              "DocumentMoniker": "C:\\Users\\viper\\Documents\\GitHub\\Tarea_3_Bases_1\\Tarea-3-BD\\Pages\\View\\List\\VistaEstadoDeCuenta.cshtml.cs",
-              "RelativeDocumentMoniker": "Pages\\View\\List\\VistaEstadoDeCuenta.cshtml.cs",
-              "ToolTip": "C:\\Users\\viper\\Documents\\GitHub\\Tarea_3_Bases_1\\Tarea-3-BD\\Pages\\View\\List\\VistaEstadoDeCuenta.cshtml.cs",
-              "RelativeToolTip": "Pages\\View\\List\\VistaEstadoDeCuenta.cshtml.cs",
-              "ViewState": "AgIAACEAAAAAAAAAAAAQwCcAAAAJAAAAAAAAAA==",
+              "DocumentIndex": 1,
+              "Title": "VistaAdmin.cshtml",
+              "DocumentMoniker": "C:\\Users\\viper\\Documents\\GitHub\\Tarea_3_Bases_1\\Tarea-3-BD\\Pages\\View\\List\\VistaAdmin.cshtml",
+              "RelativeDocumentMoniker": "Pages\\View\\List\\VistaAdmin.cshtml",
+              "ToolTip": "C:\\Users\\viper\\Documents\\GitHub\\Tarea_3_Bases_1\\Tarea-3-BD\\Pages\\View\\List\\VistaAdmin.cshtml",
+              "RelativeToolTip": "Pages\\View\\List\\VistaAdmin.cshtml",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAACEAAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-11-14T20:37:03.669Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "VistaAdmin.cshtml.cs",
+              "DocumentMoniker": "C:\\Users\\viper\\Documents\\GitHub\\Tarea_3_Bases_1\\Tarea-3-BD\\Pages\\View\\List\\VistaAdmin.cshtml.cs",
+              "RelativeDocumentMoniker": "Pages\\View\\List\\VistaAdmin.cshtml.cs",
+              "ToolTip": "C:\\Users\\viper\\Documents\\GitHub\\Tarea_3_Bases_1\\Tarea-3-BD\\Pages\\View\\List\\VistaAdmin.cshtml.cs",
+              "RelativeToolTip": "Pages\\View\\List\\VistaAdmin.cshtml.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAyAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-14T02:14:17.114Z",
+              "WhenOpened": "2024-11-14T20:37:34.617Z",
               "EditorCaption": ""
             }
           ]

@@ -3,46 +3,38 @@
 @{
 }
 
-<h2>Tarjetas de Usuario - Admin</h2>
+<h2>Tarjetas de Usuario - Maestra</h2>
 
 <table class="table">
     <thead>
         <tr>
-            @*<th>Fecha estado de cuenta</th> *@
-            <th>IdTarjetaHabiente</th>
-            <th>IdTipoTCM</th>
-            <th>Limite Crédito</th>
-            <th>Saldo Actual</th>
-            <th>Suma de movimientos</th>
-            <th>Saldo Intereses Corrientes</th>
-            <th>Saldo Intereses Moratorios</th>
-            <th>Saldo Pago Minimo</th>
-            <th>Pagos acumulados del periodo</th>
+            <th>Fecha estado de cuenta</th>
+            <th>Pago Mínimo</th>
+            <th>Pago de Contado</th>
+            <th>Intereses Corrientes</th>
+            <th>Intereses Moratorios</th>
+            <th>Cantidad Operaciones ATM</th>
+            <th>Cantidad Operaciones Ventanilla</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var tarjeta in Model.listaTCM)
         {
             <tr>
-                                   
+                <th>@tarjeta.FechaEstadoCuenta</th>
+                <th>@tarjeta.PagoMinimo</th>
+                <th>@tarjeta.PagoContado</th>
+                <th>@tarjeta.InteresesCorrientes</th>
+                <th>@tarjeta.InteresesMoratorios</th>
+                <th>@tarjeta.CantidadOperacionesATM</th>
+                <th>@tarjeta.CantidadOperacionesVentanilla</th>
+                <th>
+                    <form method="post" asp-page-handler="VistaEstadoDeCuenta">
+                        <input type="hidden" name="IdTarjetaActual" value="" /> <!-- el value deberia ser IdTarjeta ya sea TCM o TCA -->
+                        <button type="submit" class="btn btn-primary">Consultar</button>
+                    </form>
+                </th>
             </tr>
         }
     </tbody>
-	@*
-    <tbody>
-	@foreach (var item in Model.listaTCM)
-	{
-	<tr>
-		<td>
-
-			<form method="post" asp-page-handler="ConsultarTarjeta">
-                <input type="hidden" name="nombre" value="@item.IdTipoTCM" /> <!--Cambiar al valor de id de la tarjeta especifica para consultar su info-->
-				<button type="submit" class="btn btn-primary">Consultar</button>
-			</form>
-		</td>
-				
-	</tr>
-	}
-	</tbody>
-    *@
 </table>

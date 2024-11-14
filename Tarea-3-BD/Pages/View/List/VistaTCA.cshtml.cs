@@ -1,20 +1,18 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.Data;
-using System.Data.SqlClient;
 using Tarea_3_BD.Pages.Model;
 
 namespace Tarea_3_BD.Pages.View.List
 {
-    public class VistaEstadoDeCuentaModel : PageModel
+    public class VistaTCAModel : PageModel
     {
-        // creo que esta lista corresponde a una de estado de cuenta adicional? no estoy seguro
-        public List<EstadoDeCuentaAdicionalModel> listaEstadosDeCuentaAdicional = new List<EstadoDeCuentaAdicionalModel>();
-        public Usuario user = new Usuario();
-        public String errorMessage = "";
+        public string errorMessage = "";
+        public List<int> listaTCM = new List<int>();
+        public List<EstadoDeCuentaModel> listaEstadosDeCuenta = new List<EstadoDeCuentaModel>();
         public ConnectSQL SQL = new ConnectSQL();
-        public String Ip;
+        public string Ip;
 
+        public string SuccessMessage { get; set; }
         public void OnGet()
         {
             ViewData["ShowLogoutButton"] = true;
@@ -23,9 +21,6 @@ namespace Tarea_3_BD.Pages.View.List
             Console.WriteLine(user);
 
             Console.WriteLine("Usuario actual: " + user);
-
         }
-
     }
-        
 }

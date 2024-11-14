@@ -1,0 +1,59 @@
+﻿@page
+@model Tarea_3_BD.Pages.View.List.VistaTCAModel
+@{
+}
+
+<h2>Tarjetas de Usuario - Adicionales</h2>
+
+@*
+    esto es para tirar botones de consultar el estado de cuenta
+    el orden es: Login -> VistaTF -> VistaTCA -> VistaEstadoDeCuenta
+            <th>
+            <form method="post"> <!--asp-page-handler="VistaEstadoDeCuenta">-->
+                <input type="hidden" name="nombre" value="" />
+                <button type="submit" class="btn btn-primary">Consultar</button>
+            </form>
+            </th>
+
+*@
+
+
+<table class="table">
+	<thead>
+		<tr>
+            <th>Fecha Estado de Cuenta</th>
+            <th>Cantidad Operaciones ATM</th>
+            <th>Cantidad Operaciones Ventanilla</th>
+            <th>Cantidad de Compras</th>
+            <th>Suma de Compras</th>
+            <th>Cantidad de retiros</th>
+            <th>Suma de retiros</th>
+		</tr>
+	</thead>
+    <tbody>
+        <!-- Estado de cuenta de una TCA -->
+        <!-- listaEstadosDeCuenta debe ser una lista del estado de una TCA -->
+        @foreach (var ED in Model.listaEstadosDeCuenta)
+        {
+            <tr>
+                <th>@ED.FechaEstadoCuenta</th>
+                <th>@ED.CantidadOperacionesATM</th>
+                <th>@ED.CantidadOperacionesVentanilla</th>
+                
+                @*
+                <th>@ED.CantidadDeCompras</th>
+                <th>@ED.SumaDeCompras</th>
+                <th>@ED.CantidadDeRetiros</th>
+                <th>@ED.SumaDeRetiros</th>
+                *@
+                <th>
+                    <form method="post">
+                        <!--asp-page-handler="VistaEstadoDeCuenta">-->
+                        <input type="hidden" name="nombre" value="" />
+                        <button type="submit" class="btn btn-primary">Consultar</button>
+                    </form>
+                </th>
+            </tr>
+        }
+    </tbody>
+</table>

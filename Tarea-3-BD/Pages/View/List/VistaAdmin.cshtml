@@ -1,21 +1,9 @@
 ﻿@page
-@model Tarea_3_BD.Pages.View.List.VistaTFModel
+@model Tarea_3_BD.Pages.View.List.VistaAdminModel
 @{
 }
 
-@*
-    En esta pagina es donde se muestran todas las TCA y TCM asociadas a un TARJETAHABIENTE
-    Por ejemplo:
-
-    Usuario: "Juan Pérez"
-    IdTarjetaHabiente: 15
-            N° Tarjeta    Estado de la TF    Tipo de Cuenta    Fecha de Vencimiento
-             12345678        No Activa            TCA              30/10/2024
-             90123456         Activa              TCM              12/12/2027
-*@
-
-
-<h2>Tarjetas de Usuario</h2>
+<h2>Todas las Tarjetas</h2>
 
 <table class="table">
     <thead>
@@ -24,11 +12,11 @@
             <th>Estado</th> <!-- estado de la TF -->
             <th>Tipo de Cuenta</th> <!-- Es TCA o TCM  -->
             <th>Fecha de Vencimiento</th>
-            
+
         </tr>
     </thead>
     <tbody>
-        @foreach (var tarjeta in Model.listaTarjetas)
+        @foreach (var tarjeta in Model.listaTodasTarjetas)
         {
             <tr>
                 <th>@tarjeta.Numero</th>
@@ -44,5 +32,5 @@
             </tr>
         }
     </tbody>
-    
+
 </table>

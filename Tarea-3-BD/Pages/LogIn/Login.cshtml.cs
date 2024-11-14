@@ -112,16 +112,16 @@ namespace Tarea_3_BD.Pages.LogIn
                 {
                     HttpContext.Session.SetString("Username", user.Username);
 
-                    if (tipoDeUsuarioRedireccion == 1)
+                    if (tipoDeUsuarioRedireccion == 1) // si es admin, redirige a vista admin
                     {
-                        return RedirectToPage("/View/List/VistaTCM");
+                        return RedirectToPage("/View/List/VistaAdmin");
                     }
-                    else if (tipoDeUsuarioRedireccion == 2)
+                    else if (tipoDeUsuarioRedireccion == 2) // si es regular, redirige a vista tf donde ve todas las TCM y TCA del mismo usuario
                     {
-                        return RedirectToPage("/View/List/VistaUsuario");
+                        return RedirectToPage("/View/List/VistaTF");
                     }
 
-                    return RedirectToPage("/View/List/VistaTCM");
+                    return RedirectToPage("/View/List/VistaAdmin");
                 }
 
             }

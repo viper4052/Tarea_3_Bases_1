@@ -3,7 +3,7 @@ using System.ComponentModel;
 
 namespace Tarea_3_BD.Pages.Model
 {
-    public class TFModel
+    public class TFModel // modelo de tarjeta general para display de admin y usuario
     {
         [DisplayName("IdTarjeta")]
         public int IdTarjeta { get; set; }
@@ -13,26 +13,21 @@ namespace Tarea_3_BD.Pages.Model
         //[Required]
         public int Numero { get; set; }
 
-        [DisplayName("CCV")]
-        //[Required]
-        public int CCV { get; set; }
-
-
-        [DisplayName("Pin")]
+        
+        [DisplayName("EsValida")]
         [Required]
-        public int Pin { get; set; }
+        public bool EsValida { get; set; }
 
-        [DisplayName("FechaCreacion")]
+        
+        [DisplayName("TipoCuenta")]
         [Required]
-        public DateTime FechaCreacion { get; set; }
+        public string TipoCuenta { get; set; }
 
-
+        
         [DisplayName("FechaVencimiento")]
         [Required]
         public DateTime FechaVencimiento { get; set; }
 
-        [DisplayName("EsValida")]
-        [Required]
-        public bool EsValida { get; set; }
+        
     }
 }

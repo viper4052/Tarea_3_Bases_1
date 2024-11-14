@@ -8,7 +8,6 @@
 <table class="table">
     <thead>
         <tr>
-            @* <th>Fecha estado de cuenta</th> *@
             <th>Fecha de operacion</th>
             <th>Nombre tipo movimiento</th>
             <th>Descripcion</th>
@@ -17,4 +16,17 @@
             <th>Nuevo Saldo</th>
         </tr>
     </thead>
+    <tbody>
+        @foreach (var item in Model.listaEstadosDeCuentaAdicional)
+        {
+            <tr>
+                <td>@item.FechaDeOperacion</td>
+                <td>@item.NombreTipoDeMovimiento</td>
+                <td>@item.Descripcion</td>
+                <td>@item.Referencia</td>
+                <td>@item.Monto</td>
+                <td>@item.NuevoSaldo</td>
+            </tr>
+        }
+    </tbody> 
 </table>

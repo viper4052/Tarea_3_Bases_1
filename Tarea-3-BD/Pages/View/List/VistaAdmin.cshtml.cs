@@ -1,19 +1,19 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.Data;
-using System.Data.SqlClient;
 using Tarea_3_BD.Pages.Model;
 
 namespace Tarea_3_BD.Pages.View.List
 {
-    public class VistaEstadoDeCuentaModel : PageModel
+    public class VistaAdminModel : PageModel
     {
-        // creo que esta lista corresponde a una de estado de cuenta adicional? no estoy seguro
-        public List<EstadoDeCuentaAdicionalModel> listaEstadosDeCuentaAdicional = new List<EstadoDeCuentaAdicionalModel>();
-        public Usuario user = new Usuario();
-        public String errorMessage = "";
+        public string errorMessage = "";
+        // CAMBIAR EL TIPADO DE LA LISTA
+        public List<TFModel> listaTodasTarjetas = new List<TFModel>(); // esta lista va a contener todas las Tarjetas de un usuario
         public ConnectSQL SQL = new ConnectSQL();
-        public String Ip;
+        public string Ip;
+
+        public string SuccessMessage { get; set; }
+
 
         public void OnGet()
         {
@@ -23,9 +23,6 @@ namespace Tarea_3_BD.Pages.View.List
             Console.WriteLine(user);
 
             Console.WriteLine("Usuario actual: " + user);
-
         }
-
     }
-        
 }
