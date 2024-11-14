@@ -39,7 +39,14 @@ namespace Tarea_3_BD.Pages.View.List
 
         }
 
-        
+        // OnPost de prueba para ir a la vista de estado de cuenta
+        public ActionResult OnPost()
+        {
+            // faltan asegurarse de traer el estado de cuenta de la TCM o TCA
+            return RedirectToPage("/View/List/VistaEstadoDeCuenta");
+        }
+
+
 
         //public ActionResult OnPost(string username)
         //{

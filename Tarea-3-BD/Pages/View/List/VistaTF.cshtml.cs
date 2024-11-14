@@ -27,6 +27,14 @@ namespace Tarea_3_BD.Pages.View.List
             Console.WriteLine("Usuario actual: " + user);
 
         }
-                
+
+
+        public ActionResult OnPost()
+        {
+            // faltan condicionales, que si la tarjeta es TCM o TCA
+            return RedirectToPage("/View/List/VistaTCA");
+            //return RedirectToPage("/View/List/VistaTCM");
+        }
+
     }
 }

@@ -22,5 +22,12 @@ namespace Tarea_3_BD.Pages.View.List
 
             Console.WriteLine("Usuario actual: " + user);
         }
+
+        // OnPost de prueba para ir a la vista de estado de cuenta
+        public ActionResult OnPost()
+        {
+            // faltan asegurarse de traer el estado de cuenta de la TCM o TCA
+            return RedirectToPage("/View/List/VistaEstadoDeCuenta");
+        }
     }
 }
