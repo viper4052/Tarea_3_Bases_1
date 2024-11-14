@@ -1,30 +1,30 @@
 ﻿CREATE PROCEDURE [dbo].[ObtieneTCM]
-	@OutResultCode INT OUTPUT
-	, @InUsername VARCHAR(128) 
-	, @VarTipoUsuario INT
+	@OutTipoUsuario INT OUTPUT
+	, @InUsername VARCHAR(128)
+
 AS
 BEGIN
 	SET NOCOUNT ON;
-	SET @OutResultCode = 0;
-	SELECT @OutResultCode as OutResultCode
-	
-	SET @VarTipoUsuario = (SELECT IdTipoDeUsuario 
+	SET @OutTipoUsuario = 0;
+	SELECT @OutTipoUsuario AS OutTipoUsuario;
+
+	SET @OutTipoUsuario = (SELECT IdTipoDeUsuario 
 						   FROM [dbo].[Usuarios]
 						   WHERE Nombre = @InUsername)
 	
 	-- Si es admin entonces
-	IF @VarTipoUsuario = 1
-		--SELECT * FROM dbo.VistaTCM M -- falta ver si se puede mostrar toda columna en todo caso
-		SELECT IdTarjetaHabiente, SaldoActual 
-		FROM dbo.VistaTCM M
-		FULL JOIN dbo.VistaTCA A
-		ON M.IdTarjetaHabiente = A.IdTarjetaHabiente -- no se si esta afirmacion es correcta
-	-- Si es usuario regular
-	ELSE IF @VarTipoUsuario = 2
-		SELECT * FROM dbo.VistaTCM M
-		INNER JOIN dbo.VistaTCA A
-		ON M.IdTarjetaHabiente = A.IdTarjetaHabiente
-
+	IF (@OutTipoUsuario = 1)
+		BEGIN
+			SELECT * FROM [dbo].[VistaTCM]
+			SELECT * FROM [dbo].[VistaTCA]
+		END
+	-- Si es usuario regular entonces
+	ELSE
+		BEGIN
+			SELECT * FROM dbo.VistaTCM M
+			INNER JOIN dbo.VistaTCA A
+			ON M.IdTarjetaHabiente = A.IdTarjetaHabiente
+		END
 	SET NOCOUNT OFF;
 END
 RETURN 0
