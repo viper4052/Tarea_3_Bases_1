@@ -8,7 +8,7 @@
 <table class="table">
     <thead>
         <tr>
-            @* <th>Fecha estado de cuenta</th> *@
+            @*<th>Fecha estado de cuenta</th> *@
             <th>IdTarjetaHabiente</th>
             <th>IdTipoTCM</th>
             <th>Limite Crédito</th>
@@ -24,19 +24,7 @@
         @foreach (var tarjeta in Model.listaTCM)
         {
             <tr>
-                @* fecha estado de cuenta *@
-                <th>@tarjeta.SaldoPagoMinimo</th>
-                <th>@tarjeta.SaldoActual</th>
-                <th>@tarjeta.SaldoInteresesCorrientes</th>
-                <th>@tarjeta.SaldoInteresMoratorios</th>
-                @*
-                cantidad operaciones ATM
-                cantidad operaciones ventanilla
-                cantidad de compras
-                cantidad de retiros
-                suma de los retiros
-                *@
-                    
+                                   
             </tr>
         }
     </tbody>

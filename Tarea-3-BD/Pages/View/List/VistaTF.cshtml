@@ -1,0 +1,31 @@
+﻿@page
+@model Tarea_3_BD.Pages.View.List.VistaTFModel
+@{
+}
+
+
+<h2>Tarjetas de Usuario</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Número de tarjeta</th>
+            <th>Estado</th>
+            <th>Tipo de Cuenta</th>
+            <th>Fecha de Vencimiento</th>
+            
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var tarjeta in Model.listaTF)
+        {
+            <tr>
+                <th>@tarjeta.Numero</th>
+                <th>@tarjeta.EsValida</th>
+                @*<th>@tarjeta.TipoCuenta</th>*@
+                <th>@tarjeta.FechaVencimiento</th>
+            </tr>
+        }
+    </tbody>
+    
+</table>

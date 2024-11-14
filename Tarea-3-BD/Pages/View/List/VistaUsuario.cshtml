@@ -3,31 +3,44 @@
 @{
 }
 
+
+
 <h2>Tarjetas de Usuario - Usuario</h2>
 <table class="table">
     <thead>
         <tr>
-            @* <th>Fecha estado de cuenta</th> *@
-            <th>IdTarjetaHabiente</th>
-            <th>IdTipoTCM</th>
-            <th>Limite Crédito</th>
-            <th>Saldo Actual</th>
-            <th>Suma de movimientos</th>
-            <th>Saldo Intereses Corrientes</th>
-            <th>Saldo Intereses Moratorios</th>
-            <th>Saldo Pago Minimo</th>
-            <th>Pagos acumulados del periodo</th>
+            <th>Fecha Estado de Cuenta</th>
+            <th>Pago Minimo</th>
+            <th>Pago Contado</th>
+            <th>Intereses Corrientes</th>
+            <th>Intereses Moratorios</th>
+            <th>Cantidad Operaciones ATM</th>
+            <th>Cantidad Operaciones Ventanilla</th>
         </tr>
     </thead>
     <tbody>
-    @foreach (var tarjeta in Model.listaTCM)
+    @foreach (var item in Model.listaEstadosDeCuenta)
     {
         <tr>
-        @* fecha estado de cuenta *@
-        <th>@tarjeta.SaldoPagoMinimo</th>
-        <th>@tarjeta.SaldoActual</th>
-        <th>@tarjeta.SaldoInteresesCorrientes</th>
-        <th>@tarjeta.SaldoInteresMoratorios</th>
+            @*
+            <td></td>
+            <td>
+                <form method="post" asp-page-handler="VistaEstadoDeCuenta">
+                    <input type="hidden" name="nombre" value="" />
+                    <button type="submit" class="btn btn-primary">Consultar</button>
+                </form>
+            </td>
+            *@
+
+        
+            <th>@item.FechaEstadoCuenta</th>
+            <th>@item.PagoMinimo</th>
+            <th>@item.PagoContado</th>
+            <th>@item.InteresesCorrientes</th>
+            <th>@item.InteresesMoratorios</th>
+            <th>@item.CantidadOperacionesATM</th>
+            <th>@item.CantidadOperacionesVentanilla</th>
+        
         @* 
         cantidad operaciones ATM
         cantidad operaciones ventanilla
@@ -36,6 +49,8 @@
         cantidad de retiros
         suma de los retiros
         *@
+
         </tr>
+        
     }
     </tbody>

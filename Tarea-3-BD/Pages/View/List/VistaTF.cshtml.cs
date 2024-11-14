@@ -6,10 +6,11 @@ using Tarea_3_BD.Pages.Model;
 
 namespace Tarea_3_BD.Pages.View.List
 {
-    public class VistaTCMModel : PageModel
+    public class VistaTFModel : PageModel
     {
+
         public string errorMessage = "";
-        public List<TCMmodel> listaTCM = new List<TCMmodel>();
+        public List<TFModel> listaTF = new List<TFModel>();
         public ConnectSQL SQL = new ConnectSQL();
         public string Ip;
 
@@ -17,7 +18,6 @@ namespace Tarea_3_BD.Pages.View.List
 
         public void OnGet()
         {
-
             ViewData["ShowLogoutButton"] = true;
             Ip = HttpContext.Connection.RemoteIpAddress?.ToString();
             string user = (string)HttpContext.Session.GetString("Username");
@@ -28,20 +28,18 @@ namespace Tarea_3_BD.Pages.View.List
             using (SQL.connection)
             {
 
-                int resultCode = ListarTCMs();
-             
+                int resultCode = ListarTFs();
+
                 if (resultCode != 0)
                 {
                     errorMessage = SQL.BuscarError(resultCode);
                 }
 
             }
-
         }
 
-        
 
-        public ActionResult OnPost(string username)
+        public ActionResult OnPost()
         {
             using (SQL.connection)
             {
@@ -56,21 +54,17 @@ namespace Tarea_3_BD.Pages.View.List
                 }
                 else
                 {
-                    HttpContext.Session.SetString("Username", username);
+                    //HttpContext.Session.SetString("Username", username);
 
-                    return RedirectToPage("/View/List/VistaEstadoDeCuenta");
+                    return RedirectToPage("/View/List/VistaTCM");
                 }
 
             }
         }
-
-
-        
-
-        public int ListarTCMs ()
+        public int ListarTFs()
         {
             string username = (string)HttpContext.Session.GetString("Username");
-            
+
             SQL.Open();
             SQL.LoadSP("[dbo].[ObtieneTCM]");
             SQL.OutParameter("@OutTipoUsuario", SqlDbType.Int, 0);
@@ -78,7 +72,7 @@ namespace Tarea_3_BD.Pages.View.List
             Console.WriteLine("Usuario actual: " + username);
             SQL.InParameter("@InUsername", username, SqlDbType.VarChar); // el error esta en el segundo parametro
 
-            
+
             // habiendo ya cargado los posibles parametros entonces podemos llamar al SP
             using (SqlDataReader dr = SQL.command.ExecuteReader())
             {
@@ -102,39 +96,16 @@ namespace Tarea_3_BD.Pages.View.List
                 }
 
                 dr.NextResult(); // ya que leimos el outResultCode, leeremos los datos del dataset
-                listaTCM = new List<TCMmodel>();
+                listaTF = new List<TFModel>();
                 while (dr.Read())
                 {
-                    TCMmodel nTCM = new TCMmodel();
-                    /*nTCM.IdTipoTCM = dr.GetInt32(0);
-                    nTCM.IdTarjetaHabiente = dr.GetInt32(1);
-                    nTCM.LimiteCredito = dr.GetInt32(2);
-                    nTCM.SaldoActual = (decimal)dr.GetSqlMoney(3);
-                    nTCM.SumaDeMovimientos = (decimal)dr.GetSqlMoney(4);
-                    nTCM.SaldoInteresesCorrientes = (decimal)dr.GetSqlMoney(5);
-                    nTCM.SaldoInteresMoratorios = (decimal)dr.GetSqlMoney(6);
-                    nTCM.SaldoPagoMinimo = (decimal)dr.GetSqlMoney(7);
-                    nTCM.PagosAcumuladoDelPeriodo = (decimal)dr.GetSqlMoney(8);
-                    */
-					// ---------------------- SI ES TCM
-					// fecha estado de cuenta
-					// pago minimo
-					// pago de contado
-					// intereses corrientes
-					// intereses moratorios
-					// cantidad operaciones atm
-					// cantidad operaciones en ventanilla
-
-					// ---------------------- SI ES TCA
-                    // fecha estado de cuenta
-                    // cantidad operaciones ATM
-                    // cantidad operaciones en Ventanilla
-                    // cantidad de compras
-                    // suma de compras
-                    // cantidad de retiros
-                    // suma de los retiros
-
-					listaTCM.Add(nTCM);
+                    TFModel nTF = new TFModel();
+                    nTF.IdTarjeta = dr.GetInt32(0);
+                    nTF.Numero = dr.GetInt32(1);
+                    nTF.EsValida = dr.GetBoolean(2);
+                    nTF.FechaVencimiento = dr.GetDateTime(3);
+                   
+                    listaTF.Add(nTF);
                 }
 
                 SQL.Close();
