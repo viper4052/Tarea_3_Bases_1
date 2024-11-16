@@ -3,6 +3,17 @@
 @{
 }
 
+<!-- boton de navegacion de prueba -->
+<tr>
+    <th>
+        <form method="post" asp-page-handler="VistaEstadoDeCuenta">
+            <input type="hidden" name="IdTarjetaActual" value="" />
+            <button type="submit" class="btn btn-primary">Consultar</button>
+        </form>
+    </th>
+</tr>
+<!----------------------------------->
+
 @*
     En esta pagina es donde se muestran todas las TCA y TCM asociadas a un TARJETAHABIENTE
     Por ejemplo:
@@ -14,16 +25,7 @@
              90123456         Activa              TCM              12/12/2027
 *@
 
-<!-- boton de navegacion de prueba -->
-<tr>
-    <th>
-        <form method="post" asp-page-handler="VistaEstadoDeCuenta">
-            <input type="hidden" name="IdTarjetaActual" value="" />
-            <button type="submit" class="btn btn-primary">Consultar</button>
-        </form>
-    </th>
-</tr>
-<!----------------------------------->
+
 
 <h2>Tarjetas de Usuario</h2>
 

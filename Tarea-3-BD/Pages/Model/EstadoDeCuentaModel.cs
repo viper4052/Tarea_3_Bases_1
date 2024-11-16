@@ -22,6 +22,7 @@ namespace Tarea_3_BD.Pages.Model
         [Required]
         public decimal InteresesCorrientes { get; set; }
 
+
         [DisplayName("InteresesMoratorios")]
         [Required]
         public decimal InteresesMoratorios { get; set; }
@@ -35,5 +36,26 @@ namespace Tarea_3_BD.Pages.Model
         [DisplayName("CantidadOperacionesVentanilla")]
         [Required]
         public int CantidadOperacionesVentanilla { get; set; }
+
+
+        [DisplayName("CantidadDeCompras")]
+        //[Required]
+        public int CantidadDeCompras { get; set; }
+
+
+        [DisplayName("SumaDeCompras")]
+        //[Required]
+        public decimal SumaDeCompras { get; set; }
+
+
+        [DisplayName("CantidadDeRetiros")]
+        //[Required]
+        public int CantidadDeRetiros { get; set; }
+
+
+        [DisplayName("SumaDeRetiros")]
+        //[Required]
+        public decimal SumaDeRetiros { get; set; }
+
     }
 }

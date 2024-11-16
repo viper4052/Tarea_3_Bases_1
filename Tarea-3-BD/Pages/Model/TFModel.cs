@@ -16,7 +16,7 @@ namespace Tarea_3_BD.Pages.Model
         
         [DisplayName("EsValida")]
         [Required]
-        public bool EsValida { get; set; }
+        public string EsValida { get; set; }
 
         
         [DisplayName("TipoCuenta")]
