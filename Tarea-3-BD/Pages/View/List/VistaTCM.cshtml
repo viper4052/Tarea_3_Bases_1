@@ -3,19 +3,9 @@
 @{
 }
 
-<!-- boton de navegacion de prueba -->
-<tr>
-    <th>
-        <form method="post" asp-page-handler="VistaEstadoDeCuenta">
-            <input type="hidden" name="IdTarjetaActual" value="" />
-            <button type="submit" class="btn btn-primary">Consultar</button>
-        </form>
-    </th>
-</tr>
-<!----------------------------------->
-
 <h2>Tarjetas de Usuario - Maestra</h2>
 
+<br />
 <table class="table">
     <thead>
         <tr>
@@ -26,25 +16,26 @@
             <th>Intereses Moratorios</th>
             <th>Cantidad Operaciones ATM</th>
             <th>Cantidad Operaciones Ventanilla</th>
+            <th>Consultas</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var tarjeta in Model.listaEstadosDeCuenta)
         {
             <tr>
-                <th>@tarjeta.FechaEstadoCuenta</th>
-                <th>@tarjeta.PagoMinimo</th>
-                <th>@tarjeta.PagoContado</th>
-                <th>@tarjeta.InteresesCorrientes</th>
-                <th>@tarjeta.InteresesMoratorios</th>
-                <th>@tarjeta.CantidadOperacionesATM</th>
-                <th>@tarjeta.CantidadOperacionesVentanilla</th>
-                <th>
+                <td>@tarjeta.FechaEstadoCuenta</td>
+                <td>@tarjeta.PagoMinimo</td>
+                <td>@tarjeta.PagoContado</td>
+                <td>@tarjeta.InteresesCorrientes</td>
+                <td>@tarjeta.InteresesMoratorios</td>
+                <td>@tarjeta.CantidadOperacionesATM</td>
+                <td>@tarjeta.CantidadOperacionesVentanilla</td>
+                <td>
                     <form method="post" asp-page-handler="VistaEstadoDeCuenta">
-                        <input type="hidden" name="IdTarjetaActual" value="" /> <!-- el value deberia ser IdTarjeta ya sea TCM o TCA -->
+                        <input type="hidden" name="IdEstadoDeCuenta" value=@tarjeta.Id /> <!-- el value deberia ser IdTarjeta ya sea TCM o TCA -->
                         <button type="submit" class="btn btn-primary">Consultar</button>
                     </form>
-                </th>
+                </td>
             </tr>
         }
     </tbody>

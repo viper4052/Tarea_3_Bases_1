@@ -1,19 +1,9 @@
 ﻿@page
-@model Tarea_3_BD.Pages.View.List.VistaAdminModel
+@model Tarea_3_BD.Pages.View.List.VistaTarjetasModel
 @{
 }
 
 <h2>Todas las Tarjetas</h2>
-
-<!-- boton de navegacion de prueba -->
-<tr>
-    <th>
-        <form method="post" asp-page-handler="VistaEstadoDeCuenta">
-            <input type="hidden" name="IdTarjetaActual" value="" />
-            <button type="submit" class="btn btn-primary">Consultar</button>
-        </form>
-    </th>
-</tr>
 
 
 
@@ -25,23 +15,24 @@
             <th>Estado</th> <!-- estado de la TF -->
             <th>Tipo de Cuenta</th> <!-- Es TCA o TCM  -->
             <th>Fecha de Vencimiento</th>
-
+            <th>Consulta</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var tarjeta in Model.listaTodasTarjetas)
         {
             <tr>
-                <th>@tarjeta.Numero</th>
-                <th>@tarjeta.EsValida</th>
-                <th>@tarjeta.TipoCuenta</th> <!-- valida si esta en lista TCM o TCA en cshtml.cs  -->
-                <th>@tarjeta.FechaVencimiento</th>
-                <th>
+                <td>@tarjeta.Numero</td>
+                <td>@tarjeta.EsValida</td>
+                <td>@tarjeta.TipoCuenta</td> <!-- valida si esta en lista TCM o TCA en cshtml.cs  -->
+                <td>@tarjeta.FechaVencimiento</td>
+                <td>
                     <form method="post"> <!-- este boton va a redirigir a vistaTCM o vistaTCA -->
                         <input type="hidden" name="IdTarjetaActual" value="@tarjeta.IdTarjeta" /> <!-- el value deberia ser IdTarjeta ya sea TCM o TCA -->
+                        <input type="hidden" name="TipoDeTarjeta" value="@tarjeta.TipoCuenta" /> <!-- el value deberia ser que tipo de cuenta es -->
                         <button type="submit" class="btn btn-primary">Consultar</button>
                     </form>
-                </th>
+                </td>
             </tr>
         }
     </tbody>

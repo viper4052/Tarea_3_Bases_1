@@ -5,31 +5,40 @@ namespace Tarea_3_BD.Pages.Model
 {
 	public class EstadoDeCuentaAdicionalModel
 	{
-        [DisplayName("FechaDeOperacion")]
-        public DateTime FechaDeOperacion { get; set; }
+        [DisplayName("Id")]
+        //[Required]
+        public int Id { get; set; }
+
+        [DisplayName("FechaEstadoCuenta")]
+        public DateTime FechaEstadoCuenta { get; set; }
+
+        [DisplayName("CantidadDeCompras")]
+        //[Required]
+        public int CantidadDeCompras { get; set; }
+
+        [DisplayName("SumaDeCompras")]
+        //[Required]
+        public float SumaDeCompras { get; set; }
 
 
-        [DisplayName("NombreTipoDeMovimiento")]
+        [DisplayName("CantidadDeRetiros")]
         [Required]
-        public string NombreTipoDeMovimiento { get; set; }
+        public int CantidadDeRetiros { get; set; }
 
-        [DisplayName("Descripcion")]
+
+        [DisplayName("SumaDeRetiros")]
         [Required]
-        public string Descripcion { get; set; }
+        public float SumaDeRetiros { get; set; }
 
 
-        [DisplayName("Referencia")]
+        [DisplayName("CantidadOperacionesATM")]
         [Required]
-        public string Referencia { get; set; }
+        public int CantidadOperacionesATM { get; set; }
 
-        [DisplayName("Monto")]
+
+        [DisplayName("CantidadOperacionesVentanilla")]
         [Required]
-        public decimal Monto { get; set; }
-
-
-        [DisplayName("NuevoSaldo")]
-        [Required]
-        public decimal NuevoSaldo { get; set; }
+        public int CantidadOperacionesVentanilla { get; set; }
 
     }
 }

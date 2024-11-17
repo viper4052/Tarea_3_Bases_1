@@ -10,8 +10,8 @@ namespace Tarea_3_BD.Pages.Model
 
 
         [DisplayName("Numero")]
-        //[Required]
-        public int Numero { get; set; }
+        [Required]
+        public long Numero { get; set; }
 
         
         [DisplayName("EsValida")]

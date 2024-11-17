@@ -19,28 +19,23 @@ namespace Tarea_3_BD.Pages.LogIn
         public Usuario user = new Usuario();
         public String errorMessage = "";
         public ConnectSQL SQL = new ConnectSQL();
-        public String Ip;
         public int tipoDeUsuarioRedireccion;
 
 
         public void OnGet()
         {
             ViewData["ShowLogoutButton"] = false;
-            Ip = HttpContext.Connection.RemoteIpAddress?.ToString();
             string user = (string)HttpContext.Session.GetString("Usuario");
-            Console.WriteLine(user);
         }
 
 
-        public int BuscarUsuario(String IP, DateTime date) //devuelve el tipo de error (Si hubo)
+        public int BuscarUsuario() //devuelve el tipo de error (Si hubo)
         {
             SQL.Open();
             SQL.LoadSP("[dbo].[Login]");
 
             SQL.InParameter("@InUsername", user.Username, SqlDbType.VarChar);
             SQL.InParameter("@InPassword", user.Pass, SqlDbType.VarChar);
-            SQL.InParameter("@InPostInIP", IP, SqlDbType.VarChar);
-            SQL.InParameter("@InPostTime", date, SqlDbType.DateTime);
 
             SQL.OutParameter("@OutResultCode", SqlDbType.Int, 0);
             SQL.OutParameter("@OutTipoUsuario", SqlDbType.Int, 1);
@@ -48,10 +43,10 @@ namespace Tarea_3_BD.Pages.LogIn
             SQL.ExecSP();
             SQL.Close();
 
-            //intentos = (int)SQL.command.Parameters["@OutIntentos"].Value;
             tipoDeUsuarioRedireccion = (int)SQL.command.Parameters["@OutTipoUsuario"].Value; // asigno el tipo de usuario
 
-            return (int)SQL.command.Parameters["@OutResultCode"].Value;
+               
+			return (int)SQL.command.Parameters["@OutResultCode"].Value;
         }
 
         
@@ -59,7 +54,6 @@ namespace Tarea_3_BD.Pages.LogIn
         public ActionResult OnPost()
         {
             ViewData["ShowLogoutButton"] = false;
-            Ip = HttpContext.Connection.RemoteIpAddress?.ToString();
 
 
             DateTime dateNow = DateTime.Now;
@@ -98,30 +92,22 @@ namespace Tarea_3_BD.Pages.LogIn
 
             using (SQL.connection)
             {
-                int outResultCode = BuscarUsuario(Ip, dateNow);
+                int outResultCode = BuscarUsuario();
 
 
                 if (outResultCode != 0)
                 {
 
-                    errorMessage = SQL.BuscarError(outResultCode);
+                    errorMessage = "Usuario o Contraseña incorrectos";
 
                     return Page();
                 }
                 else
                 {
                     HttpContext.Session.SetString("Username", user.Username);
+					HttpContext.Session.SetString("tipoDeUsuario", tipoDeUsuarioRedireccion.ToString());
 
-                    if (tipoDeUsuarioRedireccion == 1) // si es admin, redirige a vista admin
-                    {
-                        return RedirectToPage("/View/List/VistaAdmin");
-                    }
-                    else if (tipoDeUsuarioRedireccion == 2) // si es regular, redirige a vista tf donde ve todas las TCM y TCA del mismo usuario
-                    {
-                        return RedirectToPage("/View/List/VistaTF");
-                    }
-
-                    return RedirectToPage("/View/List/VistaAdmin");
+                    return RedirectToPage("/View/List/VistaTarjetas");
                 }
 
             }

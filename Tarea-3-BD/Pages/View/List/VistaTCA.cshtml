@@ -3,30 +3,10 @@
 @{
 }
 
-<!-- boton de navegacion de prueba -->
-<tr>
-    <th>
-        <form method="post" asp-page-handler="VistaEstadoDeCuenta">
-            <input type="hidden" name="IdTarjetaActual" value="" />
-            <button type="submit" class="btn btn-primary">Consultar</button>
-        </form>
-    </th>
-</tr>
-<!----------------------------------->
 
 <h2>Tarjetas de Usuario - Adicionales</h2>
 
-@*
-    esto es para tirar botones de consultar el estado de cuenta
-    el orden es: Login -> VistaTF -> VistaTCA -> VistaEstadoDeCuenta
-            <th>
-            <form method="post"> <!--asp-page-handler="VistaEstadoDeCuenta">-->
-                <input type="hidden" name="nombre" value="" />
-                <button type="submit" class="btn btn-primary">Consultar</button>
-            </form>
-            </th>
-
-*@
+<br />
 
 
 <table class="table">
@@ -47,18 +27,16 @@
         @foreach (var ED in Model.listaEstadosDeCuenta)
         {
             <tr>
-                <th>@ED.FechaEstadoCuenta</th>
-                <th>@ED.CantidadOperacionesATM</th>
-                <th>@ED.CantidadOperacionesVentanilla</th>
-                <th>@ED.CantidadDeCompras</th>
-                <th>@ED.SumaDeCompras</th>
-                <th>@ED.CantidadDeRetiros</th>
-                <th>@ED.SumaDeRetiros</th>
-                
+                <td>@ED.FechaEstadoCuenta</td>
+                <td>@ED.CantidadOperacionesATM</td>
+                <td>@ED.CantidadOperacionesVentanilla</td>
+                <td>@ED.CantidadDeCompras</td>
+                <td>@ED.SumaDeCompras</td>
+                <td>@ED.CantidadDeRetiros</td>
+                <td>@ED.SumaDeRetiros</td>
                 <th>
                     <form method="post">
-                        <!--asp-page-handler="VistaEstadoDeCuenta">-->
-                        <input type="hidden" name="nombre" value="" />
+                        <input type="hidden" name="IdEstadoDeCuenta" value=@ED.Id />
                         <button type="submit" class="btn btn-primary">Consultar</button>
                     </form>
                 </th>

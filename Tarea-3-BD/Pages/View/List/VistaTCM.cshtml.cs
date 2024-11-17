@@ -11,24 +11,16 @@ namespace Tarea_3_BD.Pages.View.List
         public string errorMessage = "";
         public List<EstadoDeCuentaModel> listaEstadosDeCuenta = new List<EstadoDeCuentaModel>();
         public ConnectSQL SQL = new ConnectSQL();
-        public string Ip;
-
         public string SuccessMessage { get; set; }
 
         public void OnGet()
         {
 
             ViewData["ShowLogoutButton"] = true;
-            Ip = HttpContext.Connection.RemoteIpAddress?.ToString();
-            string user = (string)HttpContext.Session.GetString("Username");
-            Console.WriteLine(user);
-
-            Console.WriteLine("Usuario actual: " + user);
 
             using (SQL.connection)
             {
-
-                int resultCode = ListarEstadosDeCuenta(user);
+                int resultCode = ListarEstadosDeCuenta((string)HttpContext.Session.GetString("Username"));
 
                 if (resultCode != 0)
                 {
@@ -43,42 +35,37 @@ namespace Tarea_3_BD.Pages.View.List
         public ActionResult OnPost()
         {
             // faltan asegurarse de traer el estado de cuenta de la TCM o TCA
-            return RedirectToPage("/View/List/VistaEstadoDeCuenta");
+            return RedirectToPage("/View/List/MovimientosTCM");
         }
 
-
-
-        public ActionResult OnPost(string username)
-        {
-            using (SQL.connection)
-            {
-                int outResultCode = 0;
-
-                if (outResultCode != 0)
-                {
-
-                    errorMessage = SQL.BuscarError(outResultCode);
-
-                    return Page();
-                }
-                else
-                {
-                    HttpContext.Session.SetString("Username", username);
-
-                    return RedirectToPage("/View/List/VistaEstadoDeCuenta");
-                }
-
-            }
-        }
 
         public int ListarEstadosDeCuenta(string user)
         {
             SQL.Open();
-            SQL.LoadSP("[dbo].[ObtieneEstadoDeCuentaTCM_2]");
+            SQL.LoadSP("[dbo].[ObtieneEstadoDeCuentaTCM]");
 
-            SQL.OutParameter("@OutTipoUsuario", SqlDbType.Int, 0);
+            SQL.OutParameter("@OutResultCode", SqlDbType.Int, 0);
 
-            SQL.InParameter("@InUsername", user, SqlDbType.VarChar);
+            int IdTarjeta;
+            IdTarjeta = 1;
+
+            try
+            {
+                string IdTarjetaSession = HttpContext.Session.GetString("IdTarjeta");
+                if (!string.IsNullOrEmpty(IdTarjetaSession))
+                {
+                    IdTarjeta = Convert.ToInt32(IdTarjetaSession);
+                }
+            }
+            catch
+            {
+                Console.WriteLine("Error parseando a int");
+            }
+
+            SQL.InParameter("@InIdTCM", IdTarjeta, SqlDbType.Int);
+
+
+
             using (SqlDataReader dr = SQL.command.ExecuteReader())
             {
                 int resultCode = 0;
@@ -100,19 +87,20 @@ namespace Tarea_3_BD.Pages.View.List
                 }
 
                 dr.NextResult(); // ya que leimos el outResultCode, leeremos los datos del dataset
-                //List<TFModel> listaTodasTarjetasMaestras = new List<TFModel>();
+
                 listaEstadosDeCuenta = new List<EstadoDeCuentaModel>();
 
                 while (dr.Read())
                 {
                     EstadoDeCuentaModel EC = new EstadoDeCuentaModel();
                     EC.FechaEstadoCuenta = dr.GetDateTime(0);
-                    EC.PagoMinimo = dr.GetInt32(1);
-                    EC.PagoContado = dr.GetInt32(2);
-                    EC.InteresesCorrientes = dr.GetInt32(3);
-                    EC.InteresesMoratorios = dr.GetInt32(4);
+                    EC.PagoMinimo = (float)dr.GetDecimal(1);
+                    EC.PagoContado = (float)dr.GetDecimal(2);
+                    EC.InteresesCorrientes = (float)dr.GetDecimal(3);
+                    EC.InteresesMoratorios = (float)dr.GetDecimal(4);
                     EC.CantidadOperacionesATM = dr.GetInt32(5);
                     EC.CantidadOperacionesVentanilla = dr.GetInt32(6);
+                    EC.Id = dr.GetInt32(7);
 
                     listaEstadosDeCuenta.Add(EC);
                 }

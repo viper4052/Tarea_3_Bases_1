@@ -76,12 +76,6 @@ namespace Tarea_3_BD.Pages.View.List
                 while (dr.Read())
                 {
                     EstadoDeCuentaAdicionalModel ECD = new EstadoDeCuentaAdicionalModel();
-                    ECD.FechaDeOperacion = dr.GetDateTime(0);
-                    ECD.NombreTipoDeMovimiento = dr.GetString(1);
-                    ECD.Descripcion = dr.GetString(2);
-                    ECD.Referencia = dr.GetString(3);
-                    ECD.Monto = dr.GetInt32(4);
-                    ECD.NuevoSaldo = dr.GetInt32(5);
 
                     listaEstadosDeCuentaAdicional.Add(ECD);
                 }

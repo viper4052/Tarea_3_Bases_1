@@ -13,24 +13,7 @@ namespace Tarea_3_BD.Pages.Logout
         public IActionResult OnGet()
         {
 
-
-            using (SQL.connection)
-            {
-                SQL.Open();
-                SQL.LoadSP("[dbo].[Logout]");
-                SQL.OutParameter("@OutResultCode", SqlDbType.Int, 0);
-
-                
-                SQL.InParameter("@InUser", (string)HttpContext.Session.GetString("Usuario"), SqlDbType.VarChar);
-                SQL.InParameter("@InIp", HttpContext.Connection.RemoteIpAddress?.ToString(), SqlDbType.VarChar);
-                SQL.InParameter("@InPostTime", DateTime.Now , SqlDbType.DateTime);
-
-
-                SQL.ExecSP();
-
                 return RedirectToPage("/LogIn/LogIn");
-
-            }
         }
     }
 }

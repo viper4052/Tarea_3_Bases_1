@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\viper\\Documents\\GitHub\\Tarea_3_Bases_1\\Tarea-3-BD\\Tarea-3-BD.csproj": {}
+    "C:\\Users\\santi\\OneDrive - Estudiantes ITCR\\Escritorio\\TEC-UCR\\TEC\\4-Semestre\\BD-I\\Tarea3\\Tarea-3-BD\\Tarea-3-BD.csproj": {}
   },
   "projects": {
-    "C:\\Users\\viper\\Documents\\GitHub\\Tarea_3_Bases_1\\Tarea-3-BD\\Tarea-3-BD.csproj": {
+    "C:\\Users\\santi\\OneDrive - Estudiantes ITCR\\Escritorio\\TEC-UCR\\TEC\\4-Semestre\\BD-I\\Tarea3\\Tarea-3-BD\\Tarea-3-BD.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\viper\\Documents\\GitHub\\Tarea_3_Bases_1\\Tarea-3-BD\\Tarea-3-BD.csproj",
+        "projectUniqueName": "C:\\Users\\santi\\OneDrive - Estudiantes ITCR\\Escritorio\\TEC-UCR\\TEC\\4-Semestre\\BD-I\\Tarea3\\Tarea-3-BD\\Tarea-3-BD.csproj",
         "projectName": "Tarea-3-BD",
-        "projectPath": "C:\\Users\\viper\\Documents\\GitHub\\Tarea_3_Bases_1\\Tarea-3-BD\\Tarea-3-BD.csproj",
-        "packagesPath": "C:\\Users\\viper\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\viper\\Documents\\GitHub\\Tarea_3_Bases_1\\Tarea-3-BD\\obj\\",
+        "projectPath": "C:\\Users\\santi\\OneDrive - Estudiantes ITCR\\Escritorio\\TEC-UCR\\TEC\\4-Semestre\\BD-I\\Tarea3\\Tarea-3-BD\\Tarea-3-BD.csproj",
+        "packagesPath": "C:\\Users\\santi\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\santi\\OneDrive - Estudiantes ITCR\\Escritorio\\TEC-UCR\\TEC\\4-Semestre\\BD-I\\Tarea3\\Tarea-3-BD\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\viper\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\santi\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [

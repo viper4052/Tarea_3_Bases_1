@@ -9,20 +9,14 @@ namespace Tarea_3_BD.Pages.View.List
     public class VistaTCAModel : PageModel
     {
         public string errorMessage = "";
-        //public List<int> listaTCM = new List<int>();
-        public List<EstadoDeCuentaModel> listaEstadosDeCuenta = new List<EstadoDeCuentaModel>();
+        public List<EstadoDeCuentaAdicionalModel> listaEstadosDeCuenta = new List<EstadoDeCuentaAdicionalModel>();
         public ConnectSQL SQL = new ConnectSQL();
-        public string Ip;
 
         public string SuccessMessage { get; set; }
         public void OnGet()
         {
             ViewData["ShowLogoutButton"] = true;
-            Ip = HttpContext.Connection.RemoteIpAddress?.ToString();
             string user = (string)HttpContext.Session.GetString("Username");
-            Console.WriteLine(user);
-
-            Console.WriteLine("Usuario actual: " + user);
 
             using (SQL.connection)
             {
@@ -41,7 +35,6 @@ namespace Tarea_3_BD.Pages.View.List
         // OnPost de prueba para ir a la vista de estado de cuenta
         public ActionResult OnPost()
         {
-            // faltan asegurarse de traer el estado de cuenta de la TCA
             return RedirectToPage("/View/List/VistaEstadoDeCuenta");
         }
 
@@ -49,12 +42,29 @@ namespace Tarea_3_BD.Pages.View.List
         public int ListarEstadosDeCuenta(string user)
         {
             SQL.Open();
-            SQL.LoadSP("[dbo].[ObtieneEstadoDeCuentaTCA_2]");
+            SQL.LoadSP("[dbo].[ObtieneEstadoDeCuentaTCA]");
 
-            SQL.OutParameter("@OutTipoUsuario", SqlDbType.Int, 0);
-            SQL.OutParameter("@IdTCA", SqlDbType.Int, 0);
+            SQL.OutParameter("@OutResultCode", SqlDbType.Int, 0);
 
-            SQL.InParameter("@InUsername", user, SqlDbType.VarChar);
+            int IdTarjeta;
+            IdTarjeta = 1;
+
+            try
+            {
+                string IdTarjetaSession = HttpContext.Session.GetString("IdTarjeta");
+                if (!string.IsNullOrEmpty(IdTarjetaSession))
+                {
+                    IdTarjeta = Convert.ToInt32(IdTarjetaSession);
+                }
+            }
+            catch
+            {
+                Console.WriteLine("Error parseando a int");
+            }
+
+            SQL.InParameter("@InIdTCA", IdTarjeta, SqlDbType.Int);
+
+
             using (SqlDataReader dr = SQL.command.ExecuteReader())
             {
                 int resultCode = 0;
@@ -77,18 +87,19 @@ namespace Tarea_3_BD.Pages.View.List
 
                 dr.NextResult(); // ya que leimos el outResultCode, leeremos los datos del dataset
                 // List<TFModel> listaTodasTarjetasMaestras = new List<TFModel>();
-                listaEstadosDeCuenta = new List<EstadoDeCuentaModel>();
+                listaEstadosDeCuenta = new List<EstadoDeCuentaAdicionalModel>();
 
                 while (dr.Read())
                 {
-                    EstadoDeCuentaModel EC = new EstadoDeCuentaModel();
+                    EstadoDeCuentaAdicionalModel EC = new EstadoDeCuentaAdicionalModel();
                     EC.FechaEstadoCuenta = dr.GetDateTime(0);
                     EC.CantidadOperacionesATM = dr.GetInt32(1);
                     EC.CantidadOperacionesVentanilla = dr.GetInt32(2);
                     EC.CantidadDeCompras = dr.GetInt32(3);
-                    EC.SumaDeCompras = dr.GetInt32(4);
+                    EC.SumaDeCompras = (float)dr.GetDecimal(4);
                     EC.CantidadDeRetiros = dr.GetInt32(5);
-                    EC.SumaDeRetiros = dr.GetInt32(6);
+                    EC.SumaDeRetiros = (float)dr.GetDecimal(6);
+                    EC.Id = dr.GetInt32(7);
 
                     listaEstadosDeCuenta.Add(EC);
                 }
