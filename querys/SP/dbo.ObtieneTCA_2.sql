@@ -20,7 +20,7 @@ BEGIN
 
 
 	SELECT @OutTipoUsuario AS OutTipoUsuario;
-	SELECT @IdTCA AS IdTCA;
+	
 
 	
 	-- Si es admin entonces
@@ -36,13 +36,14 @@ BEGIN
 			SET @IdTCA = (SELECT IdTarjeta 
 						  FROM dbo.VistaTCA 
 						  WHERE IdTarjetaHabiente = @IdABuscar)
-			
 			SELECT Numero
 				   , EsValida
 				   , FechaVencimiento
 			FROM dbo.VistaTF
 			WHERE IdTarjeta = @IdTCA
+			SELECT @IdTCA AS IdTCA;
 		END
+	
 	SET NOCOUNT OFF;
 END
 RETURN 0

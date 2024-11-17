@@ -20,14 +20,18 @@ BEGIN
 
 
 	SELECT @OutTipoUsuario AS OutTipoUsuario;
-	SELECT @IdTCM AS IdTCM;
+	
 
 	
 	-- Si es admin entonces
 	IF (@OutTipoUsuario = 1)
 		BEGIN
-			SELECT * FROM [dbo].[VistaTCM]
-			SELECT * FROM [dbo].[VistaTCA]
+			--SELECT * FROM [dbo].[VistaTCM]
+			--SELECT * FROM [dbo].[VistaTCA]
+			SELECT Numero
+				   , EsValida
+				   , FechaVencimiento
+			FROM dbo.VistaTF
 		END
 
 	-- Si es usuario regular entonces
@@ -42,6 +46,7 @@ BEGIN
 				   , FechaVencimiento
 			FROM dbo.VistaTF
 			WHERE IdTarjeta = @IdTCM
+			SELECT @IdTCM AS IdTCM;
 		END
 	SET NOCOUNT OFF;
 END
