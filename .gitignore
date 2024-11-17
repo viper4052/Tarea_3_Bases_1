@@ -1,2 +1,32 @@
 *.docx
-Tarea-3-BD/.vs
+.vs/
+
+
+# Archivos y directorios específicos de Visual Studio
+
+*.csproj.user
+*.suo
+*.user
+*.userosscache
+*.ncb
+
+# Directorios de compilación
+bin/
+obj/
+
+# Archivos generados
+*.dll
+*.exe
+*.pdb
+*.runtimeconfig.json
+*.staticwebassets.build.json
+
+# Archivos temporales y de caché
+*.cache
+*.log
+*.tmp
+
+# Archivos de NuGet
+*.nuget.*
+project.assets.json
+project.nuget.cache
