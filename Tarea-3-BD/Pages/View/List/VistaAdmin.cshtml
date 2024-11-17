@@ -37,7 +37,7 @@
                 <th>@tarjeta.TipoCuenta</th> <!-- valida si esta en lista TCM o TCA en cshtml.cs  -->
                 <th>@tarjeta.FechaVencimiento</th>
                 <th>
-                    <form method="post" asp-page-handler="VistaEstadoDeCuenta">
+                    <form method="post"> <!-- este boton va a redirigir a vistaTCM o vistaTCA -->
                         <input type="hidden" name="IdTarjetaActual" value="@tarjeta.IdTarjeta" /> <!-- el value deberia ser IdTarjeta ya sea TCM o TCA -->
                         <button type="submit" class="btn btn-primary">Consultar</button>
                     </form>

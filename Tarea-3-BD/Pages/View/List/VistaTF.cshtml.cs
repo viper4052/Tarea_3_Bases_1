@@ -29,10 +29,7 @@ namespace Tarea_3_BD.Pages.View.List
             using (SQL.connection)
             {
 
-
-                int resultCode = ListarTCMS(user);
-                //resultCode = ListarTCAS(user);
-
+                int resultCode = ListarTarjetas(user);
 
                 if (resultCode != 0)
                 {
@@ -43,14 +40,14 @@ namespace Tarea_3_BD.Pages.View.List
 
         }
 
-        
-
 
         public ActionResult OnPost()
         {
-            // faltan condicionales, que si la tarjeta es TCM o TCA
-            return RedirectToPage("/View/List/VistaTCA");
-            //return RedirectToPage("/View/List/VistaTCM");
+            // faltan condicionales para decir si la tarjeta es TCM o TCA
+            // el botón tiene un value de IdTarjeta entonces así puede encontrarse si es TCM o TCA
+            
+            return RedirectToPage("/View/List/VistaTCA"); // return de prueba para asegurarse que la consulta a movimientos es posible
+            //return RedirectToPage("/View/List/VistaTCM"); // ambas páginas sirven bien, es la definición y traída de datos que no las lee bien
         }
 
 
@@ -104,9 +101,6 @@ namespace Tarea_3_BD.Pages.View.List
                 SQL.Close();
                 return resultCode;
             }
-
-
-            return 0;
         }
 
 
@@ -144,7 +138,7 @@ namespace Tarea_3_BD.Pages.View.List
                 }
 
                 dr.NextResult(); // ya que leimos el outResultCode, leeremos los datos del dataser
-                //listaTarjetas = new List<TFModel>();
+                //listaTarjetas = new List<TFModel>(); // comentado para no sobreescribir los datos leídos y almacenados de antes
                 
                 while (dr.Read())
                 {
@@ -163,8 +157,6 @@ namespace Tarea_3_BD.Pages.View.List
                 return resultCode;
             }
 
-
-            return 0;
         }
 
 
@@ -180,6 +172,14 @@ namespace Tarea_3_BD.Pages.View.List
             {
                 return "Válida";
             }
+        }
+
+
+        public int ListarTarjetas(string user)
+        {
+            ListarTCMS(user);
+            ListarTCAS(user);
+            return 0;
         }
 
     }
