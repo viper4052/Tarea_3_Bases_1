@@ -24,7 +24,7 @@ namespace Tarea_3_BD.Pages.View.List
 
                 if (resultCode != 0)
                 {
-                    errorMessage = SQL.BuscarError(resultCode);
+                    Console.WriteLine("Hubo un error"); 
                 }
 
             }

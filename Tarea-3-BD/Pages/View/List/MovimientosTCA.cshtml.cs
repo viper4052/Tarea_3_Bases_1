@@ -6,17 +6,18 @@ using Tarea_3_BD.Pages.Model;
 
 namespace Tarea_3_BD.Pages.View.List
 {
-    public class MovimientosTCMModel : PageModel
+    public class MovimientosTCAModel : PageModel
     {
         public List<Movimiento> Movimientos = new List<Movimiento>();
         public ConnectSQL SQL = new ConnectSQL();
+
         public void OnGet()
         {
             ViewData["ShowLogoutButton"] = true;
 
             using (SQL.connection)
             {
-                int resultCode = ListarMovimientos((string)HttpContext.Session.GetString("IdEstadoDeCuenta"));
+                int resultCode = ListarMovimientos((string)HttpContext.Session.GetString("IdEstadoDeCuentaAD"));
 
                 if (resultCode != 0)
                 {
@@ -28,16 +29,15 @@ namespace Tarea_3_BD.Pages.View.List
         }
 
 
-
         public int ListarMovimientos(string IdEC)
         {
             SQL.Open();
-            SQL.LoadSP("[dbo].[GetMovimientosTCM]");
+            SQL.LoadSP("[dbo].[GetMovimientosTCA]");
 
             SQL.OutParameter("@OutResultCode", SqlDbType.Int, 0);
 
             int IdEstadoCuenta;
-            IdEstadoCuenta = 1; 
+            IdEstadoCuenta = 1;
             try
             {
                 if (!string.IsNullOrEmpty(IdEC))
@@ -83,7 +83,7 @@ namespace Tarea_3_BD.Pages.View.List
                     Movimiento Mov = new Movimiento();
 
                     Mov.Fecha = DateOnly.FromDateTime(dr.GetDateTime(0));
-                    Mov.TipoMovimiento= dr.GetString(1);
+                    Mov.TipoMovimiento = dr.GetString(1);
                     Mov.Descripcion = dr.GetString(2);
                     Mov.Referencia = dr.GetString(3);
                     Mov.Monto = dr.GetDecimal(4);
@@ -95,5 +95,6 @@ namespace Tarea_3_BD.Pages.View.List
                 return 0;
             }
         }
+
     }
 }

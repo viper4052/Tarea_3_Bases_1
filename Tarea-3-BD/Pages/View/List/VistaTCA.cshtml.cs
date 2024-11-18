@@ -32,10 +32,13 @@ namespace Tarea_3_BD.Pages.View.List
             }
         }
 
-        // OnPost de prueba para ir a la vista de estado de cuenta
+        // OnPost de prueba para ir a la vista de movimientos TCA
         public ActionResult OnPost()
         {
-            return RedirectToPage("/View/List/VistaEstadoDeCuenta");
+            string IdEstadoDeCuenta = Request.Form["IdEstadoDeCuenta"];
+            HttpContext.Session.SetString("IdEstadoDeCuentaAD", IdEstadoDeCuenta);
+
+            return RedirectToPage("/View/List/MovimientosTCA");
         }
 
 
