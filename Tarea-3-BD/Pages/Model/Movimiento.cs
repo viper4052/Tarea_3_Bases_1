@@ -8,15 +8,11 @@ namespace Tarea_3_BD.Pages.Model
     {
         [DisplayName("TipoDeMovimiento")]
         [Required]
-        public string tipoMovimiento { get; set; }
+        public string TipoMovimiento { get; set; }
         
         [DisplayName("Fecha")]
         [Required]
-        public DateTime Fecha { get; set; }
-
-        [DisplayName("EstampaDeTiempo")]
-        [Required]
-        public TimeOnly Estampa{ get; set; }
+        public DateOnly Fecha { get; set; }
 
         [DisplayName("Monto")]
         [Required]
@@ -24,15 +20,15 @@ namespace Tarea_3_BD.Pages.Model
 
         [DisplayName("Saldo")]
         [Required]
-        public decimal NuevoSaldo { get; set; }
+        public float NuevoSaldo { get; set; }
 
-        [DisplayName("Usuario")]
+        [DisplayName("Descripcion")]
         [Required]
-        public string NombreUsuario { get; set; }
-        
-        [DisplayName("Ip")]
+        public string Descripcion { get; set; }
+
+        [DisplayName("Referencia")]
         [Required]
-        public string ipAdress { get; set; }
+        public string Referencia { get; set; }
 
     }
 }

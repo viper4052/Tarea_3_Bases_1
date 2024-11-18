@@ -2,3 +2,37 @@
 @model Tarea_3_BD.Pages.View.List.MovimientosTCMModel
 @{
 }
+
+
+<h2>Movimientos del Estado de cuenta</h2>
+
+<br />
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Fecha </th>
+            <th>Tipo de Movimiento</th>
+            <th>Descripcion</th>
+            <th>Referencia</th>
+            <th>Monto</th>
+            <th>Nuevo Saldo</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Estado de cuenta de una TCA -->
+        <!-- listaEstadosDeCuenta debe ser una lista del estado de una TCA -->
+        @foreach (var Mov in Model.Movimientos)
+        {
+            <tr>
+                <td>@Mov.Fecha</td>
+                <td>@Mov.TipoMovimiento</td>
+                <td>@Mov.Descripcion</td>
+                <td>@Mov.Referencia</td>
+                <td>@Mov.Monto</td>
+                <td>@Mov.NuevoSaldo</td>
+            </tr>
+        }
+    </tbody>
+</table>
