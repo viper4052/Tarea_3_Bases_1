@@ -34,7 +34,9 @@ namespace Tarea_3_BD.Pages.View.List
         // OnPost de prueba para ir a la vista de estado de cuenta
         public ActionResult OnPost()
         {
-            // faltan asegurarse de traer el estado de cuenta de la TCM o TCA
+            string IdEstadoDeCuenta = Request.Form["IdEstadoDeCuenta"];
+            HttpContext.Session.SetString("IdEstadoDeCuenta", IdEstadoDeCuenta);
+
             return RedirectToPage("/View/List/MovimientosTCM");
         }
 
@@ -93,7 +95,7 @@ namespace Tarea_3_BD.Pages.View.List
                 while (dr.Read())
                 {
                     EstadoDeCuentaModel EC = new EstadoDeCuentaModel();
-                    EC.FechaEstadoCuenta = dr.GetDateTime(0);
+                    EC.FechaEstadoCuenta = DateOnly.FromDateTime(dr.GetDateTime(0));
                     EC.PagoMinimo = (float)dr.GetDecimal(1);
                     EC.PagoContado = (float)dr.GetDecimal(2);
                     EC.InteresesCorrientes = (float)dr.GetDecimal(3);

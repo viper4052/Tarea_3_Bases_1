@@ -26,7 +26,7 @@ namespace Tarea_3_BD.Pages.Model
         
         [DisplayName("FechaVencimiento")]
         [Required]
-        public DateTime FechaVencimiento { get; set; }
+        public DateOnly FechaVencimiento { get; set; }
 
         
     }

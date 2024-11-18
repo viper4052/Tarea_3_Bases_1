@@ -3,16 +3,16 @@
   "WorkspaceRootPath": "C:\\Users\\santi\\OneDrive - Estudiantes ITCR\\Escritorio\\TEC-UCR\\TEC\\4-Semestre\\BD-I\\Tarea3\\Tarea-3-BD\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{4F3A95FE-0E32-4DD4-888D-8A391CEDAECD}|Tarea-3-BD.csproj|c:\\users\\santi\\onedrive - estudiantes itcr\\escritorio\\tec-ucr\\tec\\4-semestre\\bd-i\\tarea3\\tarea-3-bd\\pages\\view\\list\\vistatca.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{4F3A95FE-0E32-4DD4-888D-8A391CEDAECD}|Tarea-3-BD.csproj|solutionrelative:pages\\view\\list\\vistatca.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{4F3A95FE-0E32-4DD4-888D-8A391CEDAECD}|Tarea-3-BD.csproj|c:\\users\\santi\\onedrive - estudiantes itcr\\escritorio\\tec-ucr\\tec\\4-semestre\\bd-i\\tarea3\\tarea-3-bd\\pages\\view\\list\\vistatcm.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{4F3A95FE-0E32-4DD4-888D-8A391CEDAECD}|Tarea-3-BD.csproj|solutionrelative:pages\\view\\list\\vistatcm.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{4F3A95FE-0E32-4DD4-888D-8A391CEDAECD}|Tarea-3-BD.csproj|c:\\users\\santi\\onedrive - estudiantes itcr\\escritorio\\tec-ucr\\tec\\4-semestre\\bd-i\\tarea3\\tarea-3-bd\\pages\\view\\list\\vistatca.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{4F3A95FE-0E32-4DD4-888D-8A391CEDAECD}|Tarea-3-BD.csproj|solutionrelative:pages\\view\\list\\vistatca.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4F3A95FE-0E32-4DD4-888D-8A391CEDAECD}|Tarea-3-BD.csproj|c:\\users\\santi\\onedrive - estudiantes itcr\\escritorio\\tec-ucr\\tec\\4-semestre\\bd-i\\tarea3\\tarea-3-bd\\pages\\view\\list\\movimientostcm.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{4F3A95FE-0E32-4DD4-888D-8A391CEDAECD}|Tarea-3-BD.csproj|solutionrelative:pages\\view\\list\\movimientostcm.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     }
   ],
   "DocumentGroupContainers": [
@@ -22,7 +22,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Bookmark",
@@ -30,41 +30,41 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "VistaTCA.cshtml.cs",
-              "DocumentMoniker": "C:\\Users\\santi\\OneDrive - Estudiantes ITCR\\Escritorio\\TEC-UCR\\TEC\\4-Semestre\\BD-I\\Tarea3\\Tarea-3-BD\\Pages\\View\\List\\VistaTCA.cshtml.cs",
-              "RelativeDocumentMoniker": "Pages\\View\\List\\VistaTCA.cshtml.cs",
-              "ToolTip": "C:\\Users\\santi\\OneDrive - Estudiantes ITCR\\Escritorio\\TEC-UCR\\TEC\\4-Semestre\\BD-I\\Tarea3\\Tarea-3-BD\\Pages\\View\\List\\VistaTCA.cshtml.cs",
-              "RelativeToolTip": "Pages\\View\\List\\VistaTCA.cshtml.cs",
-              "ViewState": "AgIAAFAAAAAAAAAAAAAhwFsAAAAhAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-17T22:57:57.181Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "VistaTCM.cshtml.cs",
-              "DocumentMoniker": "C:\\Users\\santi\\OneDrive - Estudiantes ITCR\\Escritorio\\TEC-UCR\\TEC\\4-Semestre\\BD-I\\Tarea3\\Tarea-3-BD\\Pages\\View\\List\\VistaTCM.cshtml.cs",
-              "RelativeDocumentMoniker": "Pages\\View\\List\\VistaTCM.cshtml.cs",
-              "ToolTip": "C:\\Users\\santi\\OneDrive - Estudiantes ITCR\\Escritorio\\TEC-UCR\\TEC\\4-Semestre\\BD-I\\Tarea3\\Tarea-3-BD\\Pages\\View\\List\\VistaTCM.cshtml.cs",
-              "RelativeToolTip": "Pages\\View\\List\\VistaTCM.cshtml.cs",
-              "ViewState": "AgIAAEcAAAAAAAAAAAAIwGAAAAA8AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-17T22:56:12.596Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
               "Title": "VistaTCA.cshtml",
               "DocumentMoniker": "C:\\Users\\santi\\OneDrive - Estudiantes ITCR\\Escritorio\\TEC-UCR\\TEC\\4-Semestre\\BD-I\\Tarea3\\Tarea-3-BD\\Pages\\View\\List\\VistaTCA.cshtml",
               "RelativeDocumentMoniker": "Pages\\View\\List\\VistaTCA.cshtml",
               "ToolTip": "C:\\Users\\santi\\OneDrive - Estudiantes ITCR\\Escritorio\\TEC-UCR\\TEC\\4-Semestre\\BD-I\\Tarea3\\Tarea-3-BD\\Pages\\View\\List\\VistaTCA.cshtml",
               "RelativeToolTip": "Pages\\View\\List\\VistaTCA.cshtml",
-              "ViewState": "AgIAABIAAAAAAAAAAAAAACUAAAAoAAAAAAAAAA==",
+              "ViewState": "AgIAAB4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-11-17T22:42:10.883Z",
+              "WhenOpened": "2024-11-18T00:00:07.29Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "MovimientosTCM.cshtml",
+              "DocumentMoniker": "C:\\Users\\santi\\OneDrive - Estudiantes ITCR\\Escritorio\\TEC-UCR\\TEC\\4-Semestre\\BD-I\\Tarea3\\Tarea-3-BD\\Pages\\View\\List\\MovimientosTCM.cshtml",
+              "RelativeDocumentMoniker": "Pages\\View\\List\\MovimientosTCM.cshtml",
+              "ToolTip": "C:\\Users\\santi\\OneDrive - Estudiantes ITCR\\Escritorio\\TEC-UCR\\TEC\\4-Semestre\\BD-I\\Tarea3\\Tarea-3-BD\\Pages\\View\\List\\MovimientosTCM.cshtml",
+              "RelativeToolTip": "Pages\\View\\List\\MovimientosTCM.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-11-17T23:56:42.908Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "VistaTCM.cshtml.cs",
+              "DocumentMoniker": "C:\\Users\\santi\\OneDrive - Estudiantes ITCR\\Escritorio\\TEC-UCR\\TEC\\4-Semestre\\BD-I\\Tarea3\\Tarea-3-BD\\Pages\\View\\List\\VistaTCM.cshtml.cs",
+              "RelativeDocumentMoniker": "Pages\\View\\List\\VistaTCM.cshtml.cs",
+              "ToolTip": "C:\\Users\\santi\\OneDrive - Estudiantes ITCR\\Escritorio\\TEC-UCR\\TEC\\4-Semestre\\BD-I\\Tarea3\\Tarea-3-BD\\Pages\\View\\List\\VistaTCM.cshtml.cs",
+              "RelativeToolTip": "Pages\\View\\List\\VistaTCM.cshtml.cs",
+              "ViewState": "AgIAAFMAAAAAAAAAAAAIwF8AAAARAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-17T22:56:12.596Z",
               "EditorCaption": ""
             }
           ]

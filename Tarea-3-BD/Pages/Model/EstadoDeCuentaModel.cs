@@ -10,7 +10,7 @@ namespace Tarea_3_BD.Pages.Model
         public int Id { get; set; }
 
         [DisplayName("FechaEstadoCuenta")]
-        public DateTime FechaEstadoCuenta { get; set; }
+        public DateOnly FechaEstadoCuenta { get; set; }
 
 
         [DisplayName("PagoMinimo")]

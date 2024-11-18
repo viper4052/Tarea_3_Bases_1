@@ -92,7 +92,7 @@ namespace Tarea_3_BD.Pages.View.List
                 while (dr.Read())
                 {
                     EstadoDeCuentaAdicionalModel EC = new EstadoDeCuentaAdicionalModel();
-                    EC.FechaEstadoCuenta = dr.GetDateTime(0);
+                    EC.FechaEstadoCuenta = DateOnly.FromDateTime(dr.GetDateTime(0));
                     EC.CantidadOperacionesATM = dr.GetInt32(1);
                     EC.CantidadOperacionesVentanilla = dr.GetInt32(2);
                     EC.CantidadDeCompras = dr.GetInt32(3);

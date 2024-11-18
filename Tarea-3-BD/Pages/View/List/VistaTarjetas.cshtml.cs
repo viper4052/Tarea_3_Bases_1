@@ -115,8 +115,8 @@ namespace Tarea_3_BD.Pages.View.List
                     
                     tarjeta.Numero = dr.GetInt64(0);
                     tarjeta.EsValida = dr.GetString(1);
-					tarjeta.FechaVencimiento = dr.GetDateTime(2);
-					tarjeta.TipoCuenta = dr.GetString(3);
+					tarjeta.FechaVencimiento = DateOnly.FromDateTime(dr.GetDateTime(2));
+                    tarjeta.TipoCuenta = dr.GetString(3);
 					tarjeta.IdTarjeta = dr.GetInt32(4);
 
 
